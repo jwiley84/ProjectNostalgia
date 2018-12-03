@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnockoffUO.Plugins", "Knock
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnockoffUO.Editor.Plugins", "KnockoffUO.Editor.Plugins.csproj", "{07B83799-8A6F-8DAF-545D-C03D27224386}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnockoffUO.Editor", "KnockoffUO.Editor.csproj", "{34BA5EC3-8581-1EAB-D345-E1B5BC2E19A9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{07B83799-8A6F-8DAF-545D-C03D27224386}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07B83799-8A6F-8DAF-545D-C03D27224386}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07B83799-8A6F-8DAF-545D-C03D27224386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34BA5EC3-8581-1EAB-D345-E1B5BC2E19A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34BA5EC3-8581-1EAB-D345-E1B5BC2E19A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34BA5EC3-8581-1EAB-D345-E1B5BC2E19A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34BA5EC3-8581-1EAB-D345-E1B5BC2E19A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

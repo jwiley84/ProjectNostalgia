@@ -23,29 +23,7 @@ public class PlayerMovement : MonoBehaviour
         currentDestination = transform.position;
     }
 
-    // Fixed update is called in sync with physics
-    private void FixedUpdate()
-    {
-        // we removed the content and renamed to processmousemovement 
-        // by selecting what we want to pull out, right click for 'quick actions and refactoring' then extract. Rename the method
-
-        if (Input.GetKeyDown(KeyCode.G)) //G for gamepad. TODO allow player to read map later 
-        {
-            isInDirectMode = !isInDirectMode; // toggle mode 10-25
-        }
-
-        if (isInDirectMode)
-        {
-            ProcessDirectMovement();
-        }
-
-        else
-        {
-            ProcessMouseMovement(); // mouse movement.
-        }
-        
-    }
-    
+       
     private void ProcessDirectMovement() //all 10-25
     {
         // borrowing this code from the old third person user controller 10-25
@@ -64,29 +42,29 @@ public class PlayerMovement : MonoBehaviour
         
         m_Character.Move(m_Move, false, false); //steal this from line 93 below, then change Vector3.zero to m_Move
     }
-    private void ProcessMouseMovement()
-    {
-        if (Input.GetMouseButton(0))
-        {
-            clickPoint = cameraRaycaster.hit.point;
-            switch (cameraRaycaster.layerHit)
-            {
-                case Layer.Walkable:
-                    //currentDestination = clickPoint; //after you've explained the change, right click to rename currentClickTarget to currentDestination
-                    //then remove this line and add the below
-                    currentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
-                    break;
-                case Layer.Enemy:
-                    currentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
-                    //print("Nice try");
-                    break;
-                default:
-                    print("NOPE! NOT JUMPING OFF THE CLIFF");
-                    return;
-            }
-        }
-        WalkToDestination();
-    }
+    //private void ProcessMouseMovement()
+    //{
+    //    if (Input.GetMouseButton(0))
+    //    {//notifyMouseClickObservers
+    //        clickPoint = cameraRaycaster.hit.point;
+    //        switch (cameraRaycaster.layerHit)
+    //        {
+    //            case Layer.Walkable:
+    //                //currentDestination = clickPoint; //after you've explained the change, right click to rename currentClickTarget to currentDestination
+    //                //then remove this line and add the below
+    //                currentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
+    //                break;
+    //            case Layer.Enemy:
+    //                currentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
+    //                //print("Nice try");
+    //                break;
+    //            default:
+    //                print("NOPE! NOT JUMPING OFF THE CLIFF");
+    //                return;
+    //        }
+    //    }
+    //    WalkToDestination();
+    //}
 
     private void WalkToDestination()
     {

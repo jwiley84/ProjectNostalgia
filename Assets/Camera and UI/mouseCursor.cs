@@ -9,29 +9,32 @@ public class mouseCursor : MonoBehaviour {
     [SerializeField] Texture2D targetCursor = null; //#1!!! FIRST!
     [SerializeField] Texture2D unknownCursor = null; //#1!!! FIRST!
 
+    [SerializeField] const int walkableLayerNumber = 8;
+    [SerializeField] const int enemyLayerNumber = 9;
+
     CameraRaycaster cameraRaycaster;
 
     // Use this for initialization
     void Start()
     {
         cameraRaycaster = GetComponent<CameraRaycaster>();
-        cameraRaycaster.layerChangeObservers += OnLayerUpdate;
+        cameraRaycaster.notifyLayerChangeObservers += OnLayerChanged;
     }
-    void OnLayerUpdate()
+    void OnLayerChanged(int newLayer)
     {
-        //print(cameraRaycaster.layerHit); //#1!!! delete this line! SECOND!
-        Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto); //#1!!! THIRD
+        //print(cameraRaycaster.layerHit); 
+        Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto); 
 
-        switch (cameraRaycaster.layerHit)
+        switch (newLayer)
         {
-            case Layer.Walkable:
-                Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto); //#1!!! THIRDwalkCursor = "Walk"';
+            case walkableLayerNumber:
+                Cursor.SetCursor(walkCursor, cursorHotspot, CursorMode.Auto); 
                 break;
-            case Layer.Enemy:
-                Cursor.SetCursor(targetCursor, cursorHotspot, CursorMode.Auto); //#1!!! THIRD
+            case enemyLayerNumber:
+                Cursor.SetCursor(targetCursor, cursorHotspot, CursorMode.Auto);
                 break;
             default:
-                Cursor.SetCursor(unknownCursor, cursorHotspot, CursorMode.Auto); //#1!!! THIRD
+                Cursor.SetCursor(unknownCursor, cursorHotspot, CursorMode.Auto); 
                 return;
         }
     }
