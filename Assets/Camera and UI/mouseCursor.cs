@@ -19,6 +19,7 @@ public class mouseCursor : MonoBehaviour {
     {
         cameraRaycaster = GetComponent<CameraRaycaster>();
         cameraRaycaster.notifyLayerChangeObservers += OnLayerChanged;
+
     }
     void OnLayerChanged(int newLayer)
     {
@@ -39,3 +40,4 @@ public class mouseCursor : MonoBehaviour {
         }
     }
 }
+
