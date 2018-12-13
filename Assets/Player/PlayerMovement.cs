@@ -1,104 +1,69 @@
 using System;
 using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
+using UnityEngine.AI;
 
 [RequireComponent(typeof (ThirdPersonCharacter))]
+[RequireComponent(typeof(AICharacterControl))]
+[RequireComponent(typeof(NavMeshAgent))]
 public class PlayerMovement : MonoBehaviour
 {
     ThirdPersonCharacter m_Character;   // A reference to the ThirdPersonCharacter on the object
     CameraRaycaster cameraRaycaster;
     Vector3 currentDestination, clickPoint; //where in the world we're clicking to move to
-    String layerName;    //
+    AICharacterControl aiCharacterControl = null;
+    GameObject walkTarget = null;
 
-    [SerializeField] float walkMoveStopRadius = 0.2f;
-    [SerializeField] float attackMoveStopRadius = 2f;
-    [SerializeField] float rangedMoveStopRadius = 0.2f;
+    [SerializeField] const int walkableLayerNumber = 8;
+    [SerializeField] const int enemyLayerNumber = 9;
+
+    GameObject enemy = null;
 
     //it's added down here because all the public goes together, all the variables together and all the private, etc 10-25
     bool isInDirectMode = false; //added 10-25 
-    private void Start()
+    void Start()
     {
         cameraRaycaster = Camera.main.GetComponent<CameraRaycaster>();
         m_Character = GetComponent<ThirdPersonCharacter>();
         currentDestination = transform.position;
+        aiCharacterControl = GetComponent<AICharacterControl>();
+        walkTarget = new GameObject("walkTarget");
+
+        cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
     }
 
-       
-    private void ProcessDirectMovement() //all 10-25
+    void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
     {
-        // borrowing this code from the old third person user controller 10-25
+        //print("HAHAHAHHA");
+        switch (layerHit)
+        {
+            case enemyLayerNumber:
+                GameObject enemy = raycastHit.collider.gameObject;
+                aiCharacterControl.SetTarget(enemy.transform);
+                break;
+            case walkableLayerNumber:
+                //run up and stop
+                walkTarget.transform.position = raycastHit.point;
+                aiCharacterControl.SetTarget(walkTarget.transform);
+                break;
+            default:
+                //do a cartwheel
+                return;
+        }
 
-        // read inputs
+    }
+
+     //TODO fix this (i gonna stay broke)  
+    void ProcessDirectMovement() //all 10-25
+    {
         float h = Input.GetAxis("Horizontal");
-        float v = Input.GetAxis("Vertical"); //change crossplatforminputmanager to input 10-25
-        
-        //since we always want relative camera, we're gonna steal that too
+        float v = Input.GetAxis("Vertical");
 
-        //after copy-pasta'ing, add the Vector3s
-        //then change the m_Cam to Camera.main.transform
-        // calculate camera relative direction to move:
         Vector3 m_CamForward = Vector3.Scale(Camera.main.transform.forward, new Vector3(1, 0, 1)).normalized;
         Vector3 m_Move = v * m_CamForward + h * Camera.main.transform.right;
         
         m_Character.Move(m_Move, false, false); //steal this from line 93 below, then change Vector3.zero to m_Move
     }
-    //private void ProcessMouseMovement()
-    //{
-    //    if (Input.GetMouseButton(0))
-    //    {//notifyMouseClickObservers
-    //        clickPoint = cameraRaycaster.hit.point;
-    //        switch (cameraRaycaster.layerHit)
-    //        {
-    //            case Layer.Walkable:
-    //                //currentDestination = clickPoint; //after you've explained the change, right click to rename currentClickTarget to currentDestination
-    //                //then remove this line and add the below
-    //                currentDestination = ShortDestination(clickPoint, walkMoveStopRadius);
-    //                break;
-    //            case Layer.Enemy:
-    //                currentDestination = ShortDestination(clickPoint, attackMoveStopRadius);
-    //                //print("Nice try");
-    //                break;
-    //            default:
-    //                print("NOPE! NOT JUMPING OFF THE CLIFF");
-    //                return;
-    //        }
-    //    }
-    //    WalkToDestination();
-    //}
 
-    private void WalkToDestination()
-    {
-        var playerToClickPoint = currentDestination - transform.position;
-        if (playerToClickPoint.magnitude >= 0.1)
-        {
-            m_Character.Move(playerToClickPoint, false, false);
-        }
-        else
-        {
-            m_Character.Move(Vector3.zero, false, false);
-        }
-    }
-
-    Vector3 ShortDestination(Vector3 destination, float shortening)
-    {
-        Vector3 reductionVector = (destination - transform.position).normalized * shortening;
-        return destination - reductionVector;
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawLine(transform.position, currentDestination);
-        Gizmos.DrawSphere(currentDestination, 0.2f);
-        //Gizmos.DrawSphere(, 0.2f);
-
-        //add this after the vector changes
-        Gizmos.color = Color.green;
-        Gizmos.DrawSphere(clickPoint, 0.1f);//.color = Color.blue;
-
-        Gizmos.color = new Color(255f, 0f, 0f, 0.4f);
-        //Gizmos.DrawSphere(transform.position, 2f);
-
-        Gizmos.DrawWireSphere(transform.position, 2f);
-    }
 }
 

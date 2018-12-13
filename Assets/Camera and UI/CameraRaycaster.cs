@@ -7,7 +7,10 @@ using System.Collections.Generic;
 
 public class CameraRaycaster : MonoBehaviour
 {
+
+    // INSPECTOR PROPERTIES RENDERED BY CUSTOM EDITOR SCRIPT
     [SerializeField] int[] layerPriorities; //new
+    [SerializeField] string stringToPrint = "THIS IS THE SONG THAT NEVER ENDS";
     
     float maxRaycastDepth = 100f; //new and changed name
     int topPriorityLayerLastFrame = -1; //default layer will give the ? cursor //new
@@ -55,6 +58,8 @@ public class CameraRaycaster : MonoBehaviour
             //}
             notifyMouseClickObservers(priorityHit.Value, layerHit);
         }
+
+        //print(stringToPrint);
     }
     
     RaycastHit? FindTopPriorityHit (RaycastHit[] raycastHits)
