@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] const int walkableLayerNumber = 8;
     [SerializeField] const int enemyLayerNumber = 9;
 
-    GameObject enemy = null;
+    //GameObject enemy = null;
 
     //it's added down here because all the public goes together, all the variables together and all the private, etc 10-25
     bool isInDirectMode = false; //added 10-25 

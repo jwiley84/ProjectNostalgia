@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Hedgemaze.unity
+- path: Assets/Scenes/Hedgemaze.unity
   isLoaded: 1
   isActive: 1

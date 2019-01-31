@@ -1,7 +1,5 @@
 ﻿using UnityEditor;//since it alters only the unity program, no other 'using' is needed
 
-
-
 [CustomEditor(typeof(CameraRaycaster))] //this declares what the editor is replacing
 /// remember, this will fully replace the GUI of the camera raycaster
 
@@ -19,7 +17,7 @@ public class CameraRaycasterEditor : Editor //inherits from Editor, not monodeve
             EditorGUI.indentLevel++; //indent over one
             {
                 //whenever we get around to it, do the PrintString() first, as a 'here's what it does' thing.
-                //PrintString(); //this is just to show what a custom editor does. 
+                PrintString(); //this is just to show what a custom editor does. 
                 BindArraySize(); //make a unfolded GUI as long as the LayerPriority array
                 BindArrayElements(); //fill the GUI with the content of the laryer priority array
             }
