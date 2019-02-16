@@ -34,6 +34,18 @@ public class Player : MonoBehaviour, IDamagable {
         set { currentHealthPoints = value; }
     }
 
+    public float MaxHealthPoints
+    {
+        get { return maxHealthPoints; }
+        set { maxHealthPoints = value; }
+    }
+
+    public float MaxManaPoints
+    {
+        get { return maxManaPoints; }
+        set { maxManaPoints = value; }
+    }
+
     /// <summary>
     /// THIS IS THE JANKIEST POS I'VE EVER WRITTEN, SINCE IT FUNCITONS AROUND 'COLLIDING' WITH MY MANA BARREL
     /// UGH, WAIT, THIS IS THE FUNCTIONALITY I'LL NEED FOR MY HEALTH FOUNTAINS/RIVERS

@@ -23,13 +23,18 @@ public class Item : MonoBehaviour {
         {
             case ItemType.MANA:
                 Debug.Log("U just used a mana pot!");
-                player.CurrentManaPoints++;
+                if (player.CurrentManaPoints < player.MaxManaPoints)
+                {
+                    player.CurrentManaPoints++;
+                }
                 break;
             case ItemType.HEALTH:
                 Debug.Log("U just used a health pot!");
-                player.CurrentHealthPoints++;
+                if (player.CurrentHealthPoints < player.MaxHealthPoints)
+                {
+                    player.CurrentHealthPoints++;
+                }
                 break;
-
         }
     }
     
