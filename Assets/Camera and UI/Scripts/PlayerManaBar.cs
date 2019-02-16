@@ -21,6 +21,7 @@ public class PlayerManaBar : MonoBehaviour
     void Update()
     {
         float xValue = -(player.manaAsPercentage / 2f) - 0.5f;
+        Debug.Log(xValue);
         manaBarRawImage.uvRect = new Rect(xValue, 0f, 0.5f, 1f);
     }
 }
