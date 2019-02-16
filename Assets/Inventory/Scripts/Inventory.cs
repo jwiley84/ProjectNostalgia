@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
+//using UnityEngine.Mathf;
 
 public class Inventory : MonoBehaviour {
 
@@ -20,16 +22,23 @@ public class Inventory : MonoBehaviour {
     public float slotPaddingLeft, slotPaddingTop;
     public float slotSize;
     public GameObject slotPrefab;
-    private Slot from, to;
-
+    private static Slot from, to;
     private List<GameObject> allSlots;
-
     //MOUSEOVER STUFF
     public GameObject iconPrefab;
     private static GameObject hoverObject;//THIS MIGHT BE THE ISSUE
     public Canvas canvas;
     //DONE //MOUSEOVER STUFF
+    //DELETY STUFF
+    public EventSystem eventSystem;
+    //DONE DELETY STUFF
 
+    //FADY STUFF
+    public CanvasGroup canvasGroup;
+    private bool fadingIn;
+    private bool fadingOut;
+    public float fadeTime;
+    //end fady stuff
     private static int emptySlots;
 
     public static int EmptySlots
@@ -46,6 +55,21 @@ public class Inventory : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
+        //DELETY STUFF
+        if (Input.GetMouseButtonUp(0)) //0 is left button
+        {
+            if (!eventSystem.IsPointerOverGameObject(-1) && from != null) //mouse pointer is -1
+            //so if I've picked an item, and my pointer is NOT over a game object, and i let up on the left button (above IF)
+            {
+                from.ClearSlot();
+                Destroy(GameObject.Find("Hover"));
+                to = null;
+                from = null;
+                hoverObject = null;
+                emptySlots++;
+            }
+        }
+        //DONE DELETY STUFF
         //MOUSEOVER STUFF
         if (hoverObject != null)
         {
@@ -54,6 +78,17 @@ public class Inventory : MonoBehaviour {
             hoverObject.transform.position = canvas.transform.TransformPoint(position);
         }
         //DONE //MOUSEOVER STUFF
+        if (Input.GetKeyDown("i"))
+        {
+            if (canvasGroup.alpha > 0)
+            {
+                StartCoroutine("fadeOut");
+            }
+            else
+            {
+                StartCoroutine("fadeIn");
+            }
+        }
     }
 
     private void CreateLayout()
@@ -100,8 +135,8 @@ public class Inventory : MonoBehaviour {
                 ///the side padding at the inventoryRect.localPosition needs to be adjusted.
                 slotRect.localPosition = inventoryRect.localPosition + new Vector3(slotPaddingLeft * (x + 1) + (slotSize * x), -slotPaddingTop * (y + 1) - (slotSize * y));
                 //after this point, add the slot to the script on the inv gui, then hit play for shiggles
-                slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotSize);
-                slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize);
+                slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotSize * canvas.scaleFactor);
+                slotRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotSize * canvas.scaleFactor);
 
                 allSlots.Add(newSlot);
             }
@@ -215,6 +250,57 @@ public class Inventory : MonoBehaviour {
             //MOUSEOVER STUFF
             hoverObject = null;
             //DONE MOUSEOVER STUFF
+        }
+    }
+
+    private IEnumerator fadeOut()
+    {
+        if (!fadingOut)
+        {
+            fadingOut = true;
+            fadingIn = false;
+            StopCoroutine("fadeIn");
+
+            float startAlpha = canvasGroup.alpha;
+            float rate = 1.0f / fadeTime;
+            float progress = 0.0f;
+
+            while (progress < 1.0)
+            {
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, 0, progress);
+                progress += rate * Time.deltaTime;
+
+                yield return null;
+                     
+            }
+
+            canvasGroup.alpha = 0;
+            fadingOut = false;
+        }
+    }
+    private IEnumerator fadeIn()
+    {
+        if (!fadingIn)
+        {
+            fadingOut = false;
+            fadingIn = true;
+            StopCoroutine("fadeOut");
+
+            float startAlpha = canvasGroup.alpha;
+            float rate = 1.0f / fadeTime;
+            float progress = 0.0f;
+
+            while (progress < 1.0)
+            {
+                canvasGroup.alpha = Mathf.Lerp(startAlpha, 1, progress);
+                progress += rate * Time.deltaTime;
+
+                yield return null;
+
+            }
+
+            canvasGroup.alpha = 1;
+            fadingIn = false;
         }
     }
 

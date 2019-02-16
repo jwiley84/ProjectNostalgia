@@ -13,14 +13,12 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile>
-    </CompilerResponseFile>
+    <CompilerResponseFile></CompilerResponseFile>
     <UnityProjectGenerator>VSTU</UnityProjectGenerator>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows64:19</UnityBuildTarget>
     <UnityVersion>2017.2.3p4</UnityVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <LangVersion>4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -227,8 +225,8 @@
     <Compile Include="Assets\Camera and UI\Scripts\CameraRaycaster.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\EnemyHealthBar.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\mouseCursor.cs" />
-    <Compile Include="Assets\Camera and UI\Scripts\PlayerManaBar.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\PlayerHealthBar.cs" />
+    <Compile Include="Assets\Camera and UI\Scripts\PlayerManaBar.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\HelloWorld.cs" />
     <Compile Include="Assets\Inventory\Scripts\Inventory.cs" />
@@ -237,6 +235,7 @@
     <Compile Include="Assets\Inventory\Scripts\Slot.cs" />
     <Compile Include="Assets\Player\Player.cs" />
     <Compile Include="Assets\Player\PlayerMovement.cs" />
+    <Compile Include="Assets\Player\Projectile.cs" />
     <Compile Include="Assets\Samples\SampleScenes\Menu\Scripts\MenuSceneLoader.cs" />
     <Compile Include="Assets\Samples\SampleScenes\Menu\Scripts\PauseMenu.cs" />
     <Compile Include="Assets\Samples\SampleScenes\Menu\Scripts\SceneAndURLLoader.cs" />
@@ -327,9 +326,11 @@
     <Compile Include="Assets\Samples\Standard Assets\Vehicles\Car\Scripts\SkidTrail.cs" />
     <Compile Include="Assets\Samples\Standard Assets\Vehicles\Car\Scripts\Suspension.cs" />
     <Compile Include="Assets\Samples\Standard Assets\Vehicles\Car\Scripts\WheelEffects.cs" />
+    <Compile Include="Assets\Scripts\IDamagable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\ArtSamples\Mega Fantasy Props Pack\README.txt" />
+    <None Include="Assets\RainEntertainment\FantasyMonster2\Elf DualBlade\readMe.txt" />
     <None Include="Assets\Samples\SampleScenes\Shaders\Skybox-Procedural.shader" />
     <None Include="Assets\Samples\Standard Assets\Characters\FirstPersonCharacter\FirstPersonCharacterGuidelines.txt" />
     <None Include="Assets\Samples\Standard Assets\Characters\RollerBall\RollerBallGuidelines.txt" />
