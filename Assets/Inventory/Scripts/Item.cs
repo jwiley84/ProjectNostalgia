@@ -12,6 +12,8 @@ public class Item : MonoBehaviour {
     public Sprite spriteNeutral;
     public Sprite spriteHighlighted;
     public int maxSize;
+    public int healthHeal;
+    public int manaHeal;
 
     public void Start()
     {
@@ -32,7 +34,14 @@ public class Item : MonoBehaviour {
                 Debug.Log("U just used a health pot!");
                 if (player.CurrentHealthPoints < player.MaxHealthPoints)
                 {
-                    player.CurrentHealthPoints++;
+                    if ((player.MaxHealthPoints - player.CurrentHealthPoints) > healthHeal)
+                    {
+                        player.CurrentHealthPoints += (player.MaxHealthPoints - player.CurrentHealthPoints);
+                    }
+                    else
+                    {
+                        player.CurrentHealthPoints += healthHeal;
+                    }
                 }
                 break;
         }

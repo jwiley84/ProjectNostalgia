@@ -88,7 +88,7 @@ public class CameraRaycaster : MonoBehaviour
         if (newLayer != topPriorityLayerLastFrame)
         {
             topPriorityLayerLastFrame = newLayer;
-            notifyLayerChangeObservers(newLayer);
+            //notifyLayerChangeObservers(newLayer);
         }
     }
 }

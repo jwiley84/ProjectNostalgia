@@ -221,12 +221,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Camera and UI\Enemies\EnemyUI.cs" />
+    <Compile Include="Assets\Camera and UI\EnemyHealthBar.cs" />
+    <Compile Include="Assets\Camera and UI\PlayerHealthBar.cs" />
+    <Compile Include="Assets\Camera and UI\PlayerManaBar.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\CameraRaycaster.cs" />
-    <Compile Include="Assets\Camera and UI\Scripts\EnemyHealthBar.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\mouseCursor.cs" />
-    <Compile Include="Assets\Camera and UI\Scripts\PlayerHealthBar.cs" />
-    <Compile Include="Assets\Camera and UI\Scripts\PlayerManaBar.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\HelloWorld.cs" />
     <Compile Include="Assets\Inventory\Scripts\Inventory.cs" />
