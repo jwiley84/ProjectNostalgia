@@ -86,4 +86,10 @@ public class Enemy : MonoBehaviour {
         Gizmos.color = new Color(255f, 0f, 0, 0.5f);
         Gizmos.DrawWireSphere(transform.position, attackRadius);
     }
+
+    public void TakeDamage(float damage)
+    {
+        currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
+        if (currentHealthPoints <= 0) { Destroy(gameObject); }
+    }
 }
