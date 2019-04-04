@@ -7,8 +7,7 @@ public class EnemyUI : MonoBehaviour {
 
     // Works around Unity 5.5's lack of nested prefabs
     [Tooltip("The UI canvas prefab")]
-    [SerializeField]
-    GameObject enemyCanvasPrefab = null;
+    [SerializeField] GameObject enemyCanvasPrefab = null;
 
     Camera cameraToLookAt;
 

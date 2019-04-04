@@ -5,6 +5,7 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour {
 
     GameObject player;
+    public int scootch = 15;
 
 	// Use this for initialization
 	void Start () {
@@ -25,8 +26,10 @@ public class CameraFollow : MonoBehaviour {
         //check player x, set camera x to player x
         //check player z, set camera arm to player z
         //why are we skipping y??
+        var test = new Vector3(player.transform.position.x - scootch, 0, player.transform.position.z);
+        //print("test" + test);
+        transform.position = test;
 
-        transform.position = player.transform.position;
 
     }
 }

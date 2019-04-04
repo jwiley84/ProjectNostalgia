@@ -6,6 +6,7 @@ TagManager:
   tags:
   - InvPanel
   - Item
+  - Container
   layers:
   - Default
   - TransparentFX
@@ -17,7 +18,7 @@ TagManager:
   - 
   - Walkable
   - Enemy
-  - Wut
+  - Container
   - 
   - 
   - 

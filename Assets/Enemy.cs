@@ -11,10 +11,10 @@ public class Enemy : MonoBehaviour {
     [SerializeField] GameObject projectileToUse; //NEW
     [SerializeField] GameObject projectileSocket;
     [SerializeField] float damagePerShot = 8f;
-    [SerializeField] float secondsBetweenShots = 0.5f;//Part 3
+    [SerializeField] float secondsBetweenShots = 0.9f;//Part 3
 
     bool isAttacking = false; //Part 3
-    float currentHealthPoints = 100f;
+    float currentHealthPoints;
     AICharacterControl aiCharacterControl = null;
     GameObject player = null;
 
@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour {
     {
         player = GameObject.FindGameObjectWithTag("Player");
         aiCharacterControl = GetComponent<AICharacterControl>();
+        currentHealthPoints = maxHealthPoints;
     }
 
     void Update()
@@ -72,6 +73,7 @@ public class Enemy : MonoBehaviour {
         
         //SET IT'S SPEED, THEN VELOCITY BASED ON SPEED
         float projectileSpeed = projectileComponent.projectleSpeed;
+        print("me " + projectileSpeed);
         newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
     }
 
@@ -90,6 +92,6 @@ public class Enemy : MonoBehaviour {
     public void TakeDamage(float damage)
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
-        if (currentHealthPoints <= 0) { Destroy(gameObject); }
+        if (currentHealthPoints <= 0) { Destroy(gameObject); } //HIHI I'M NEW
     }
 }

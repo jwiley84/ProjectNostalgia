@@ -31,6 +31,7 @@ public class CameraRaycaster : MonoBehaviour
         if (EventSystem.current.IsPointerOverGameObject())
         {
             NotifyObserversIfLayerChanged(5);
+            //print("weird");
             return; //stop looking for other objects
         }
 
