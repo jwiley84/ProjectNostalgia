@@ -156,13 +156,13 @@ public class Slot : MonoBehaviour, IPointerClickHandler
             //print("This is the left shift");
             Vector2 position;
 
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(Inventory.Instance.canvas.transform as RectTransform, Input.mousePosition, Inventory.Instance.canvas.worldCamera, out position);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(InventoryManager.Instance.canvas.transform as RectTransform, Input.mousePosition, InventoryManager.Instance.canvas.worldCamera, out position);
 
-            Inventory.Instance.selectStackSize.SetActive(true);
+            InventoryManager.Instance.selectStackSize.SetActive(true);
 
-            Inventory.Instance.selectStackSize.transform.position = Inventory.Instance.canvas.transform.TransformPoint(position);
+            InventoryManager.Instance.selectStackSize.transform.position = InventoryManager.Instance.canvas.transform.TransformPoint(position);
 
-            Inventory.Instance.SetStackInfo(items.Count);
+            InventoryManager.Instance.SetStackInfo(items.Count);
         }
     }
     //don't add until you get to this point on the iventory script that says to

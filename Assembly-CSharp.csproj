@@ -75,6 +75,7 @@
     <Compile Include="Assets\Inventory\Scripts\Containers_v1\Container.cs" />
     <Compile Include="Assets\Inventory\Scripts\Containers_v1\ContainerSystem.cs" />
     <Compile Include="Assets\Inventory\Scripts\Inventory.cs" />
+    <Compile Include="Assets\Inventory\Scripts\InventoryManager.cs" />
     <Compile Include="Assets\Inventory\Scripts\ItemScript.cs" />
     <Compile Include="Assets\Inventory\Scripts\SizeIssues.cs" />
     <Compile Include="Assets\Inventory\Scripts\Slot.cs" />
