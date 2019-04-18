@@ -6,12 +6,19 @@ using UnityEngine.UI;
 
 public class Slot : MonoBehaviour, IPointerClickHandler
 {
-    #region variables
+    #region Fields
+
     private Stack<ItemScript> items; // this is for keeping count
     public Text stackText; // this is to change the text on the game
 
     public Sprite slotEmpty; //this is to make sure we can indicate an empty slot
     public Sprite slotHighlight; //this is to fill the slot
+
+    private CanvasGroup canvasGroup; //418
+    #endregion
+
+
+    #region Properties
 
     public bool isEmpty
     {
@@ -55,6 +62,13 @@ public class Slot : MonoBehaviour, IPointerClickHandler
 
         txtRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, slotRect.sizeDelta.x); //resizes the text object to be the same size as the slot it's on
         txtRect.SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, slotRect.sizeDelta.y);
+
+        //418
+        if (transform.parent != null)
+        {
+            canvasGroup = transform.parent.GetComponent<CanvasGroup>();
+            print(canvasGroup);
+        }
        
     }
 	
@@ -147,7 +161,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
     {
    
         /*if (eventData.)*/
-        if (eventData.button == PointerEventData.InputButton.Right && !GameObject.Find("Hover") && Inventory.CanvasGroup.alpha > 0)
+        if (eventData.button == PointerEventData.InputButton.Right && !GameObject.Find("Hover") && canvasGroup.alpha > 0)//418 (replaced Inventory.CanvasGroup)
         {
             UseItem();
         }

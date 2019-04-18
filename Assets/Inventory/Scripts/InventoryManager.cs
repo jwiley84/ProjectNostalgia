@@ -26,13 +26,15 @@ public class InventoryManager : MonoBehaviour
     private int splitAmt;
     private int maxStackCount;
 
-    private Slot from; //removed the static keyword
-    private Slot to; //broke this apart from the from, to above
-    private Slot movingSlot; //removed the static keyword
+    private Slot from;
+    private Slot to;
+    private Slot movingSlot;
 
-    private GameObject clicked; //removed the static keyword
-    private GameObject hoverObject;//removed the static keyword
+    private GameObject clicked;
+    private GameObject hoverObject;
+    #endregion
 
+    #region skip
     //skip these ones, I only use them for my project, not Arik's
     /// <summary>
     /// A prototy of out mana item
@@ -47,6 +49,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject health;
     #endregion
 
+    // pause before doing these. Look at the amount of errors.
     #region Properties
     public static InventoryManager Instance
     {

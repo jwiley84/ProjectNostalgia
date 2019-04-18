@@ -4,26 +4,33 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IDamagable {
 
-   
+    #region Fields
     [SerializeField] float maxHealthPoints = 100f;
-    //float currentHealthPoints;
     [SerializeField] float maxManaPoints = 100f;
     [SerializeField] float currentManaPoints = 100f;
     [SerializeField] float damage = 5f;  
     [SerializeField] float minTimeBetweenHits = 0.5f;  
-    [SerializeField] float maxAttackRange = 1.5f;  
-    [SerializeField] int enemyLayer = 9;  
+    [SerializeField] float maxAttackRange = 1.5f;
+
+    [SerializeField] int enemyLayer = 9;
 
     public Inventory inventory;
-    float currentHealthPoints;
+
+    private Inventory storageChest; //418
+
     GameObject currentTarget;  
+
     CameraRaycaster cameraRaycaster;  
-    float _mLastHitTime = 0f;  
+
+    float _mLastHitTime = 0f;
+    float currentHealthPoints;
 
     //this is where we're going to put variables to check for attack item (book, sword, bow)
-    
 
 
+    #endregion
+
+    #region Properties
     public float healthAsPercentage { get { return currentHealthPoints / maxHealthPoints; }}
 
     public float manaAsPercentage { get { return currentManaPoints / maxManaPoints; }}
@@ -51,6 +58,9 @@ public class Player : MonoBehaviour, IDamagable {
         get { return maxManaPoints; }
         set { maxManaPoints = value; }
     }
+    #endregion
+
+    #region Methods
 
     void Start() 
     {
@@ -58,7 +68,22 @@ public class Player : MonoBehaviour, IDamagable {
         cameraRaycaster.notifyMouseClickObservers += OnMouseClick;
         currentHealthPoints = maxHealthPoints;
     }
-
+    void Update()//418
+    {
+        if (Input.GetKeyDown("i"))//418
+        {
+            inventory.Open();
+        }
+        //add this after checking out the above section
+        if (Input.GetKeyDown("e"))
+        {
+            if (storageChest != null) //why do we need this line? 
+            {
+                storageChest.Open();
+            }
+            
+        }
+    }
 
     void OnMouseClick(RaycastHit raycastHit, int layerHit) 
     {
@@ -107,6 +132,22 @@ public class Player : MonoBehaviour, IDamagable {
         {
             inventory.AddItem(other.GetComponent<ItemScript>());
         }
+       else if (other.tag == "Container") //Arik's will say 'chest'
+        {
+            storageChest = other.GetComponent<ChestScript>().chestInventory;  //418 yess this will yell for a bit
+        }
+    }
+
+    private void OnTriggerExit(Collider other)//418 ask Arik to puzzle this part out
+    {
+        if (other.gameObject.tag == "Container")
+        {
+            if (storageChest.IsOpen)
+            {
+                storageChest.Open();
+            }
+            storageChest = null;
+        }
     }
 
     public void TakeDamage(float damage)
@@ -114,4 +155,6 @@ public class Player : MonoBehaviour, IDamagable {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
         //if (currentHealthPoints <= 0) { Destroy(gameObject); } //HIHI I'M NEW
     }
+
+    #endregion
 }

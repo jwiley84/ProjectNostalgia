@@ -9,7 +9,8 @@ using System;
 public class Inventory : MonoBehaviour {
 
 
-    #region Variables
+    #region Fields
+
     public int rows;
     public int slots;
     private static int emptySlots;
@@ -26,7 +27,7 @@ public class Inventory : MonoBehaviour {
     private List<GameObject> allSlots;
 
     //FADY STUFF
-    private static CanvasGroup canvasGroup;
+    private CanvasGroup canvasGroup;//418
     private bool fadingIn;
     private bool fadingOut;
     public float fadeTime;
@@ -38,6 +39,8 @@ public class Inventory : MonoBehaviour {
     //private static GameObject selectStackSizeStatic; //this is a solvable bug
     public GameObject frustration;
     private bool hopeIsDead = true;
+    private bool isOpen; //418
+
         #endregion
 
     #region Properties
@@ -45,11 +48,6 @@ public class Inventory : MonoBehaviour {
     {
         get { return emptySlots; }
         set { emptySlots = value; }
-    }
-
-    public static CanvasGroup CanvasGroup
-    {
-        get { return Inventory.canvasGroup; }
     }
 
     public static Inventory Instance
@@ -63,16 +61,19 @@ public class Inventory : MonoBehaviour {
             return Inventory.instance;
         }
     }
+
+    public bool IsOpen { get => isOpen; set => isOpen = value; } //418
     #endregion
 
 
     // Use this for initialization
     void Start () {
 
-        canvasGroup = transform.parent.GetComponent<CanvasGroup>();
+        canvasGroup = transform.parent.GetComponent<CanvasGroup>(); //418 Green bug
         CreateLayout();
 
         InventoryManager.Instance.MovingSlot = GameObject.Find("MovingSlot").GetComponent<Slot>();
+        isOpen = false; //418
 	}
 	
 	// Update is called once per frame
@@ -106,24 +107,34 @@ public class Inventory : MonoBehaviour {
             position.Set(position.x, position.y - hoverYOffset);
             InventoryManager.Instance.HoverObject.transform.position = InventoryManager.Instance.canvas.transform.TransformPoint(position);
         }
-        //DONE //MOUSEOVER STUFF
-        if (Input.GetKeyDown("i"))
-        {
-            if (canvasGroup.alpha > 0)
-            {
-                StartCoroutine(fadeOut());
-                PutItemBack();
-            }
-            else
-            {
-                StartCoroutine(fadeIn());
-            }
-        }
+        //DONE MOUSEOVER STUFF
+
+
+        //Open();//418 DON'T FORGET TO REMOVE THIS!!!
         if (Input.GetKeyDown("="))
         {
             frustration.SetActive(!hopeIsDead);
             hopeIsDead = !hopeIsDead;
         }
+    }
+
+    public void Open() //418
+    {
+        //if (Input.GetKeyDown("i")) //these don't need to be here, but I need you to see them to tell Arik
+        //{
+            if (canvasGroup.alpha > 0)
+            {
+            
+                StartCoroutine(fadeOut());
+                PutItemBack();
+                isOpen = false; //418 added in later
+            }
+            else
+            {
+            isOpen = true;//418 added in later
+                StartCoroutine(fadeIn());
+            }
+        //}
     }
 
     //TOOLTIP
@@ -285,6 +296,7 @@ public class Inventory : MonoBehaviour {
 
                 //set parent is because it's an image, and MUST be a child of th canvas
                 newSlot.transform.SetParent(this.transform.parent);
+                Console.WriteLine("HA!");
 
 
                 ///the side padding at the inventoryRect.localPosition needs to be adjusted.
@@ -381,7 +393,8 @@ public class Inventory : MonoBehaviour {
         }
         //this is the item we just clicked on
         
-        else if (InventoryManager.Instance.From == null && canvasGroup.alpha == 1 && !Input.GetKey(KeyCode.LeftShift))
+        //else if (InventoryManager.Instance.From == null && canvasGroup.alpha == 1 && !Input.GetKey(KeyCode.LeftShift))//418 changed
+        else if (InventoryManager.Instance.From == null && clicked.transform.parent.GetComponent<Inventory>().isOpen && !Input.GetKey(KeyCode.LeftShift))
         {
             
             if (!clicked.GetComponent<Slot>().isEmpty && !GameObject.Find("Hover"))
