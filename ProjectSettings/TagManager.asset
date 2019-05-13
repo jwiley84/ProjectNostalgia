@@ -7,6 +7,7 @@ TagManager:
   - InvPanel
   - Item
   - Container
+  - Inventory
   layers:
   - Default
   - TransparentFX

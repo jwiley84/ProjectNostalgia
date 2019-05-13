@@ -13,7 +13,7 @@ public class Inventory : MonoBehaviour {
 
     public int rows;
     public int slots;
-    private static int emptySlots;
+    private int emptySlots;
     private float hoverYOffset;
     //position and size of inventory
     private RectTransform inventoryRect;
@@ -27,7 +27,7 @@ public class Inventory : MonoBehaviour {
     private List<GameObject> allSlots;
 
     //FADY STUFF
-    private CanvasGroup canvasGroup;//418
+    public CanvasGroup canvasGroup;//418
     private bool fadingIn;
     private bool fadingOut;
     public float fadeTime;
@@ -39,12 +39,13 @@ public class Inventory : MonoBehaviour {
     //private static GameObject selectStackSizeStatic; //this is a solvable bug
     public GameObject frustration;
     private bool hopeIsDead = true;
-    private bool isOpen; //418
+    private bool isOpen; //423
+    public static bool mouseInside = false;
 
-        #endregion
+    #endregion
 
     #region Properties
-    public static int EmptySlots
+    public int EmptySlots
     {
         get { return emptySlots; }
         set { emptySlots = value; }
@@ -65,25 +66,42 @@ public class Inventory : MonoBehaviour {
     public bool IsOpen { get => isOpen; set => isOpen = value; } //418
     #endregion
 
+    #region ifTime-DebugInvisibleMoving
+    public void PointerExit()
+    {
+        mouseInside = false;
+        HideToolTip();
+    }
+
+    public void PointerEnter()
+    {
+        if (canvasGroup.alpha > 0)
+        {
+            mouseInside = true;
+        } 
+    }
+
+    #endregion
+
 
     // Use this for initialization
     void Start () {
 
-        canvasGroup = transform.parent.GetComponent<CanvasGroup>(); //418 Green bug
+        // canvasGroup = transform.parent.GetComponent<CanvasGroup>(); // this line to be deleted
         CreateLayout();
 
         InventoryManager.Instance.MovingSlot = GameObject.Find("MovingSlot").GetComponent<Slot>();
-        isOpen = false; //418
+        isOpen = false; //423
 	}
 	
 	// Update is called once per frame
 	void Update ()
     {
         //DELETY STUFF
-        if (Input.GetMouseButtonUp(0)) //0 is left button
+        if (Input.GetMouseButtonUp(0))
         {
-            if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject(-1) && InventoryManager.Instance.From != null) //mouse pointer is -1
-            //so if my pointer is NOT over a game object, and i let up on the left button (above IF)
+            //if (!InventoryManager.Instance.eventSystem.IsPointerOverGameObject(-1) && InventoryManager.Instance.From != null)
+            if (!mouseInside && InventoryManager.Instance.From != null)//423
             {
                 InventoryManager.Instance.From.ClearSlot();
                 Destroy(GameObject.Find("Hover"));
@@ -108,9 +126,7 @@ public class Inventory : MonoBehaviour {
             InventoryManager.Instance.HoverObject.transform.position = InventoryManager.Instance.canvas.transform.TransformPoint(position);
         }
         //DONE MOUSEOVER STUFF
-
-
-        //Open();//418 DON'T FORGET TO REMOVE THIS!!!
+        
         if (Input.GetKeyDown("="))
         {
             frustration.SetActive(!hopeIsDead);
@@ -118,7 +134,7 @@ public class Inventory : MonoBehaviour {
         }
     }
 
-    public void Open() //418
+    public void Open()
     {
         //if (Input.GetKeyDown("i")) //these don't need to be here, but I need you to see them to tell Arik
         //{
@@ -127,25 +143,26 @@ public class Inventory : MonoBehaviour {
             
                 StartCoroutine(fadeOut());
                 PutItemBack();
-                isOpen = false; //418 added in later
+                HideToolTip();
+                isOpen = false; //423
             }
             else
             {
-            isOpen = true;//418 added in later
+            isOpen = true;//423
                 StartCoroutine(fadeIn());
             }
         //}
     }
 
-    //TOOLTIP
-    public void ShowToolTip(GameObject slot)
+    public virtual void ShowToolTip(GameObject slot)
     {
         Slot tmpSlot = slot.GetComponent<Slot>();
-        if (!tmpSlot.isEmpty && InventoryManager.Instance.HoverObject == null)
-        //solvable bug
-        //if (!tmpSlot.isEmpty && hoverObject == null && !selectStackSizeStatic.activeSelf )
-        {
-            InventoryManager.Instance.visualTextObject.text = tmpSlot.currentItem.GetToolTip();
+        //if (!tmpSlot.isEmpty && InventoryManager.Instance.HoverObject == null)
+        print("I hit showtooltip");
+      
+        if (slot.GetComponentInParent<Inventory>().isOpen && !tmpSlot.isEmpty && InventoryManager.Instance.HoverObject == null && !InventoryManager.Instance.selectStackSize.activeSelf )
+        {//added the "isOpen" to beginning of the above line
+            InventoryManager.Instance.visualTextObject.text = tmpSlot.CurrentItem.GetToolTip();
             InventoryManager.Instance.sizeTextObject.text = InventoryManager.Instance.visualTextObject.text;
 
             InventoryManager.Instance.toolTipObject.SetActive(true);
@@ -157,12 +174,10 @@ public class Inventory : MonoBehaviour {
         
     }
 
-    public void HideToolTip(GameObject slot)
+    public void HideToolTip()//418 We don't need the slot because the InventoryManager fixess
     {
         InventoryManager.Instance.toolTipObject.SetActive(false);
     }
-
-
 
     /// <summary>
     /// Saves the inventory and its content
@@ -178,17 +193,17 @@ public class Inventory : MonoBehaviour {
             if (!tmp.isEmpty) //We only want to save the info if the slot contains an item
             {
                 //Creates a string with this format: SlotIndex-ItemType-AmountOfItems; this string can be read so that we can rebuild the inventory
-                content += i + "-" + tmp.currentItem.type.ToString() + "-" + tmp.Items.Count.ToString() + ";";
+                content += i + "-" + tmp.CurrentItem.Item.ItemName.ToString() + "-" + tmp.Items.Count.ToString() + ";";
             }
         }
 
         //Stores all the info in the PlayerPrefs
-        PlayerPrefs.SetString("content", content);
-        PlayerPrefs.SetInt("slots", slots);
-        PlayerPrefs.SetInt("rows", rows);
-        PlayerPrefs.SetFloat("slotPaddingLeft", slotPaddingLeft);
-        PlayerPrefs.SetFloat("slotPaddingTop", slotPaddingTop);
-        PlayerPrefs.SetFloat("slotSize", slotSize);
+        PlayerPrefs.SetString(gameObject.name + "content", content);
+        PlayerPrefs.SetInt(gameObject.name + "slots", slots);
+        PlayerPrefs.SetInt(gameObject.name + "rows", rows);
+        PlayerPrefs.SetFloat(gameObject.name + "slotPaddingLeft", slotPaddingLeft);
+        PlayerPrefs.SetFloat(gameObject.name + "slotPaddingTop", slotPaddingTop);
+        PlayerPrefs.SetFloat(gameObject.name + "slotSize", slotSize);
         //PlayerPrefs.SetFloat("xPos", inventoryRect.position.x);
         //PlayerPrefs.SetFloat("yPos", inventoryRect.position.y);
         PlayerPrefs.Save();
@@ -200,12 +215,12 @@ public class Inventory : MonoBehaviour {
     public void LoadInventory()
     {
         //Loads all the inventory's data InventoryManager.Instance.From the playerprefs
-        string content = PlayerPrefs.GetString("content");
-        slots = PlayerPrefs.GetInt("slots");
-        rows = PlayerPrefs.GetInt("rows");
-        slotPaddingLeft = PlayerPrefs.GetFloat("slotPaddingLeft");
-        slotPaddingTop = PlayerPrefs.GetFloat("slotPaddingTop");
-        slotSize = PlayerPrefs.GetFloat("slotSize");
+        string content = PlayerPrefs.GetString(gameObject.name + "content");
+        slots = PlayerPrefs.GetInt(gameObject.name + "slots");
+        rows = PlayerPrefs.GetInt(gameObject.name + "rows");
+        slotPaddingLeft = PlayerPrefs.GetFloat(gameObject.name + "slotPaddingLeft");
+        slotPaddingTop = PlayerPrefs.GetFloat(gameObject.name + "slotPaddingTop");
+        slotSize = PlayerPrefs.GetFloat(gameObject.name + "slotSize");
 
         //Sets the inventorys position
         //inventoryRect.position = new Vector3(PlayerPrefs.GetFloat("xPos"), PlayerPrefs.GetFloat("yPos"), inventoryRect.position.z);
@@ -232,20 +247,20 @@ public class Inventory : MonoBehaviour {
 
             for (int i = 0; i < amount; i++) //Adds the correct amount of items to the inventory
             {
-                switch (type)
-                {
-                    case ItemType.MANA: //Adds a manapotion
-                        allSlots[index].GetComponent<Slot>().AddItem(InventoryManager.Instance.mana.GetComponent<ItemScript>());
-                        break;
-                    case ItemType.HEALTH://Adds a healthpotion
-                        allSlots[index].GetComponent<Slot>().AddItem(InventoryManager.Instance.health.GetComponent<ItemScript>());
-                        break;
-                }
+                //switch (type)
+                //{
+                //    case ItemType.MANA: //Adds a manapotion
+                //        allSlots[index].GetComponent<Slot>().AddItem(InventoryManager.Instance.mana.GetComponent<ItemScript>());
+                //        break;
+                //    case ItemType.HEALTH://Adds a healthpotion
+                //        allSlots[index].GetComponent<Slot>().AddItem(InventoryManager.Instance.health.GetComponent<ItemScript>());
+                //        break;
+                //}
             }
         }
     }
 
-    private void CreateLayout()
+    public virtual void CreateLayout()
     {
         //Just In Case measure:
         //Destroyes the old slot's if we remake our inventory
@@ -333,7 +348,7 @@ public class Inventory : MonoBehaviour {
 
     public bool AddItem(ItemScript item)
     {
-        if (item.maxSize == 1)
+        if (item.Item.MaxSize == 1)
         {
             PlaceEmpty(item);
             return true;
@@ -348,7 +363,7 @@ public class Inventory : MonoBehaviour {
 
                 if (!tmp.isEmpty)
                 {
-                    if (tmp.currentItem.type == item.type && tmp.isAvailable)
+                    if (tmp.CurrentItem.Item.ItemName == item.Item.ItemName && tmp.isAvailable)
                     {
                         if (!InventoryManager.Instance.MovingSlot.isEmpty && InventoryManager.Instance.Clicked.GetComponent<Slot>() == tmp.GetComponent<Slot>())
                         {
@@ -374,75 +389,75 @@ public class Inventory : MonoBehaviour {
 
     public void MoveItem(GameObject clicked)
     {
-        InventoryManager.Instance.Clicked = clicked;
-        
-        if (!InventoryManager.Instance.MovingSlot.isEmpty)
+        // 5/9 This on is Arik's
+        CanvasGroup cg = clicked.transform.parent.GetComponent<CanvasGroup>();
+
+        // 5/9 this one is mine
+        CanvasGroup jjCG = clicked.transform.parent.parent.GetComponent<CanvasGroup>();
+
+        //for this one, after the ||, remember Arik's only needs 2 parents, not three
+        if (jjCG != null && jjCG.alpha > 0 || clicked.transform.parent.parent.parent.GetComponent<CanvasGroup>().alpha >  0) //changed
         {
-            Slot tmp = InventoryManager.Instance.Clicked.GetComponent<Slot>();
-            
-            if (tmp.isEmpty)
+            InventoryManager.Instance.Clicked = clicked;
+            if (!InventoryManager.Instance.MovingSlot.isEmpty)
             {
-                tmp.AddItems(InventoryManager.Instance.MovingSlot.Items);
-                InventoryManager.Instance.MovingSlot.Items.Clear();
+                Slot tmp = InventoryManager.Instance.Clicked.GetComponent<Slot>();
+
+                if (tmp.isEmpty)
+                {
+                    tmp.AddItems(InventoryManager.Instance.MovingSlot.Items);
+                    InventoryManager.Instance.MovingSlot.Items.Clear();
+                    Destroy(GameObject.Find("Hover"));
+                }
+                else if (!tmp.isEmpty && InventoryManager.Instance.MovingSlot.CurrentItem.Item.ItemName == tmp.CurrentItem.Item.ItemName && tmp.isAvailable)
+                {
+                    MergeStacks(InventoryManager.Instance.MovingSlot, tmp);
+                }
+            }
+            //this is the item we just clicked on
+
+            //else if (InventoryManager.Instance.From == null && canvasGroup.alpha == 1 && !Input.GetKey(KeyCode.LeftShift))//423
+            else if (InventoryManager.Instance.From == null && clicked.transform.parent.GetComponent<Inventory>().isOpen && !Input.GetKey(KeyCode.LeftShift))
+            {
+
+                if (!clicked.GetComponent<Slot>().isEmpty && !GameObject.Find("Hover"))
+                {
+                    InventoryManager.Instance.From = clicked.GetComponent<Slot>();
+                    //InventoryManager.Instance.From.GetComponent<Image>().color = Color.grey;
+                    //make sure using UnityEngine.UI;
+
+                    CreateHoverIcon();
+                }
+            }
+
+            else if (InventoryManager.Instance.To == null && !Input.GetKey(KeyCode.LeftShift))
+            {
+
+                InventoryManager.Instance.To = clicked.GetComponent<Slot>();
                 Destroy(GameObject.Find("Hover"));
             }
-            else if (!tmp.isEmpty && InventoryManager.Instance.MovingSlot.currentItem.type == tmp.currentItem.type && tmp.isAvailable)
+            if (InventoryManager.Instance.To != null && InventoryManager.Instance.From != null)
             {
-                MergeStacks(InventoryManager.Instance.MovingSlot, tmp);
-            }
-        }
-        //this is the item we just clicked on
-        
-        //else if (InventoryManager.Instance.From == null && canvasGroup.alpha == 1 && !Input.GetKey(KeyCode.LeftShift))//418 changed
-        else if (InventoryManager.Instance.From == null && clicked.transform.parent.GetComponent<Inventory>().isOpen && !Input.GetKey(KeyCode.LeftShift))
-        {
-            
-            if (!clicked.GetComponent<Slot>().isEmpty && !GameObject.Find("Hover"))
-            {
-                InventoryManager.Instance.From = clicked.GetComponent<Slot>();
-                //InventoryManager.Instance.From.GetComponent<Image>().color = Color.grey;
-                //make sure using UnityEngine.UI;
-
-                CreateHoverIcon();  
-            }
-        }
-        
-        else if (InventoryManager.Instance.To == null && !Input.GetKey(KeyCode.LeftShift))
-        {
-
-            InventoryManager.Instance.To = clicked.GetComponent<Slot>();
-            Destroy(GameObject.Find("Hover"));
-        }
-        if (InventoryManager.Instance.To != null && InventoryManager.Instance.From != null)
-        {
-            if (!InventoryManager.Instance.To.isEmpty && InventoryManager.Instance.From.currentItem.type == InventoryManager.Instance.To.currentItem.type && InventoryManager.Instance.To.isAvailable)
-            {
-                MergeStacks(InventoryManager.Instance.From, InventoryManager.Instance.To);
-            }
-            else
-            {
-                Stack<ItemScript> tmpTo = new Stack<ItemScript>(InventoryManager.Instance.To.Items); //pause here, go refactor slot.cs items to be public getter/setter (encapsulate AND USE field) + static
-                InventoryManager.Instance.To.AddItems(InventoryManager.Instance.From.Items);
-
-                if (tmpTo.Count == 0) //if you move a stack to an empty slot
+                if (!InventoryManager.Instance.To.isEmpty && InventoryManager.Instance.From.CurrentItem.Item.ItemName == InventoryManager.Instance.To.CurrentItem.Item.ItemName && InventoryManager.Instance.To.isAvailable)
                 {
-                    //go add this function to the slot.cs
-                    InventoryManager.Instance.From.ClearSlot();
+                    MergeStacks(InventoryManager.Instance.From, InventoryManager.Instance.To);
                 }
                 else
                 {
-                    InventoryManager.Instance.From.AddItems(tmpTo);
+                // everything that was here is now in Slot.cs
+                    Slot.SwapItems(InventoryManager.Instance.From, InventoryManager.Instance.To);
                 }
+
+
+                //InventoryManager.Instance.From.GetComponent<Image>().color = Color.clear;
+                InventoryManager.Instance.To = null;
+                InventoryManager.Instance.From = null;
+                //MOUSEOVER STUFF
+                Destroy(GameObject.Find("Hover"));
+                //DONE MOUSEOVER STUFF
             }
-
-
-            //InventoryManager.Instance.From.GetComponent<Image>().color = Color.clear;
-            InventoryManager.Instance.To = null;
-            InventoryManager.Instance.From = null;
-            //MOUSEOVER STUFF
-            Destroy(GameObject.Find("Hover"));
-            //DONE MOUSEOVER STUFF
         }
+               
     }
     private void CreateHoverIcon()
     {
@@ -525,7 +540,7 @@ public class Inventory : MonoBehaviour {
     public void MergeStacks(Slot source, Slot destination)
     {
         
-        int max = destination.currentItem.maxSize - destination.Items.Count;
+        int max = destination.CurrentItem.Item.MaxSize - destination.Items.Count;
         int count = source.Items.Count < max ? source.Items.Count : max;
 
         for (int i = 0; i < count; i++)

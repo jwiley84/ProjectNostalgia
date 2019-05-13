@@ -10,7 +10,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <ProjectGuid>{6DAC30B5-E053-E7EC-948C-1D77D058C240}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -71,6 +72,7 @@
     <Compile Include="Assets\Camera and UI\Scripts\mouseCursor.cs" />
     <Compile Include="Assets\Enemy.cs" />
     <Compile Include="Assets\HelloWorld.cs" />
+    <Compile Include="Assets\Inventory\Scripts\CharacterPanel.cs" />
     <Compile Include="Assets\Inventory\Scripts\ChestScript.cs" />
     <Compile Include="Assets\Inventory\Scripts\Containers_v1\Chest.cs" />
     <Compile Include="Assets\Inventory\Scripts\Containers_v1\ChestSystem.cs" />
@@ -78,7 +80,13 @@
     <Compile Include="Assets\Inventory\Scripts\Containers_v1\ContainerSystem.cs" />
     <Compile Include="Assets\Inventory\Scripts\Inventory.cs" />
     <Compile Include="Assets\Inventory\Scripts\InventoryManager.cs" />
+    <Compile Include="Assets\Inventory\Scripts\ItemManager.cs" />
     <Compile Include="Assets\Inventory\Scripts\ItemScript.cs" />
+    <Compile Include="Assets\Inventory\Scripts\ItemScripts\Consumable.cs" />
+    <Compile Include="Assets\Inventory\Scripts\ItemScripts\Equipment.cs" />
+    <Compile Include="Assets\Inventory\Scripts\ItemScripts\Item.cs" />
+    <Compile Include="Assets\Inventory\Scripts\ItemScripts\ItemContainer.cs" />
+    <Compile Include="Assets\Inventory\Scripts\ItemScripts\Weapon.cs" />
     <Compile Include="Assets\Inventory\Scripts\SizeIssues.cs" />
     <Compile Include="Assets\Inventory\Scripts\Slot.cs" />
     <Compile Include="Assets\Mixamo\Magic Pack\Demo\CameraScroll.cs" />
@@ -205,6 +213,9 @@
     <None Include="Assets\Samples\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
     <None Include="Assets\Samples\Standard Assets\ParticleSystems\Shaders\PriorityParticleAlpha.shader" />
     <None Include="Assets\Samples\Standard Assets\Vehicles\Car\Shaders\ReflectiveDiffuseSpec.shader" />
+    <None Include="Assets\StreamingAssets\Items.xml">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Assets\Samples\Standard Assets\ParticleSystems\ParticleSystemsGuidelines.txt" />
     <None Include="Assets\Samples\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
     <None Include="Assets\Samples\Standard Assets\Fonts\OpenSans\License!.txt" />
@@ -215,6 +226,7 @@
     <None Include="Assets\Samples\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
     <None Include="Assets\Samples\Standard Assets\Effects\Projectors\Shaders\ProjectorLight.shader" />
     <None Include="Assets\Samples\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
+    <None Include="Assets\Inventory\XMLFile1.xml" />
     <None Include="Assets\LowpolyWeaponPack\README.txt" />
     <None Include="Assets\Samples\Standard Assets\Vehicles\Car\CarGuidelines.txt" />
     <None Include="Assets\Samples\Standard Assets\Effects\Projectors\Shaders\ProjectorMultiply.shader" />

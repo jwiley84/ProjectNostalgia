@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<ItemContainer xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Weapons>
+    <Item xsi:type="Weapon">
+      <ItemType>MAINHAND</ItemType>
+      <Quality>RARE</Quality>
+      <SpriteNeutral>Weapons/03a-parchment</SpriteNeutral>
+      <SpriteHighlighted>Weapons/03a-parchmentborder</SpriteHighlighted>
+      <ItemName>LongSword</ItemName>
+      <Description>Bleh sword!</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>0</Intellect>
+      <Stamina>10</Stamina>
+      <Strength>5</Strength>
+      <Agility>2</Agility>
+    </Item>
+  </Weapons>
+  <Equipment>
+    
+    <Item xsi:type="Equipment">
+      <ItemType>HEAD</ItemType>
+      <Quality>WEIRD</Quality>
+      <SpriteNeutral>Equipment/04-parchment</SpriteNeutral>
+      <SpriteHighlighted>Equipment/04-parchmentborder</SpriteHighlighted>
+      <ItemName>Sturdy Helm</ItemName>
+      <Description>It's sturdy</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>0</Intellect>
+      <Stamina>5</Stamina>
+      <Strength>5</Strength>
+      <Agility>2</Agility>
+    </Item>
+    <Item xsi:type="Equipment">
+      <ItemType>OFFHAND</ItemType>
+      <Quality>GLOWY</Quality>
+      <SpriteNeutral>Equipment/01b-parchment</SpriteNeutral>
+      <SpriteHighlighted>Equipment/01b-parchmentborder</SpriteHighlighted>
+      <ItemName>Super awesome Shield</ItemName>
+      <Description>Of doom!!</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>0</Intellect>
+      <Stamina>100</Stamina>
+      <Strength>100</Strength>
+      <Agility>100</Agility>
+    </Item>
+  </Equipment>
+  <Consumables>
+    <Item xsi:type="Consumable">
+      <ItemType>CONSUMABLE</ItemType>
+      <Quality>WEIRD</Quality>
+      <SpriteNeutral>Consumables/Inventory_HealthPotion</SpriteNeutral>
+      <SpriteHighlighted>Consumables/Inventory_SelectedHealthPotion</SpriteHighlighted>
+      <ItemName>Simple Health Potion</ItemName>
+      <Description>It's healthy</Description>
+      <MaxSize>10</MaxSize>
+      <Health>100</Health>
+      <Mana>0</Mana>
+    </Item>
+    <Item xsi:type="Consumable">
+      <ItemType>CONSUMABLE</ItemType>
+      <Quality>WEIRD</Quality>
+      <SpriteNeutral>Consumables/Inventory_ManaPotion</SpriteNeutral>
+      <SpriteHighlighted>Consumables/Inventory_SelectedManaPotion</SpriteHighlighted>
+      <ItemName>Simple Mana Potion</ItemName>
+      <Description>It's funny looking</Description>
+      <MaxSize>10</MaxSize>
+      <Health>100</Health>
+      <Mana>100</Mana>
+    </Item>
+  </Consumables>
+</ItemContainer>

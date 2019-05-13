@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour, IDamagable {
 
@@ -15,6 +16,31 @@ public class Player : MonoBehaviour, IDamagable {
     [SerializeField] int enemyLayer = 9;
 
     public Inventory inventory;
+    public Inventory charPanel;
+
+    public Text statsText;
+    public int baseIntellect;
+    public int baseAgility;
+    public int baseStrength;
+    public int baseStamina;
+    private int intellect;
+    private int agility;
+    private int strength;
+    private int stamina;
+
+    private static Player instance; 
+
+    public static Player Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = GameObject.FindObjectOfType<Player>();
+            }
+            return Player.instance;
+        }
+    }
 
     private Inventory storageChest; //418
 
@@ -67,6 +93,7 @@ public class Player : MonoBehaviour, IDamagable {
         cameraRaycaster = FindObjectOfType<CameraRaycaster>();
         cameraRaycaster.notifyMouseClickObservers += OnMouseClick;
         currentHealthPoints = maxHealthPoints;
+        SetStats(0, 0, 0, 0);
     }
     void Update()//418
     {
@@ -82,6 +109,14 @@ public class Player : MonoBehaviour, IDamagable {
                 storageChest.Open();
             }
             
+        }
+        if (Input.GetKeyDown("c"))
+        {
+            if (charPanel != null) //why do we need this line? 
+            {
+                charPanel.Open();
+            }
+
         }
     }
 
@@ -130,7 +165,46 @@ public class Player : MonoBehaviour, IDamagable {
     {
        if (other.tag == "Item")
         {
-            inventory.AddItem(other.GetComponent<ItemScript>());
+            ///Picks a random category, consumeable, equipment, weapons
+            int randomType = UnityEngine.Random.Range(0, 3);
+
+            //instantiates for adding to the inventory
+            GameObject tmp = Instantiate(InventoryManager.Instance.itemObject);
+
+            //Adds the item script to the object
+            tmp.AddComponent<ItemScript>();
+
+            //variable for selecting an item inside the category
+            int randomItem;
+
+            // allows access to the variables (the sprites) in itemscript
+            //tmp.AddComponent<ItemScript>();
+
+            ItemScript newEquipment = tmp.GetComponent<ItemScript>();
+
+            switch (randomType) //Selects an item
+            {
+                case 0:
+                    //Selects an item
+                    randomItem = UnityEngine.Random.Range(0, InventoryManager.Instance.ItemContainer.Consumables.Count);
+
+                    //Finds the item in the list
+                    newEquipment.Item = InventoryManager.Instance.ItemContainer.Consumables[randomItem];
+                    break;
+
+                case 1:
+                    randomItem = UnityEngine.Random.Range(0, InventoryManager.Instance.ItemContainer.Weapons.Count);
+                    newEquipment.Item = InventoryManager.Instance.ItemContainer.Weapons[randomItem];
+                    break;
+                case 2:
+
+                    randomItem = UnityEngine.Random.Range(0, InventoryManager.Instance.ItemContainer.Equipment.Count);
+                    newEquipment.Item = InventoryManager.Instance.ItemContainer.Equipment[randomItem];
+                    break;
+            }
+
+            inventory.AddItem(newEquipment);
+            Destroy(tmp);
         }
        else if (other.tag == "Container") //Arik's will say 'chest'
         {
@@ -138,13 +212,13 @@ public class Player : MonoBehaviour, IDamagable {
         }
     }
 
-    private void OnTriggerExit(Collider other)//418 ask Arik to puzzle this part out
+    private void OnTriggerExit(Collider other)//423? Maybe?
     {
         if (other.gameObject.tag == "Container")
         {
             if (storageChest.IsOpen)
             {
-                storageChest.Open();
+                storageChest.Open(); //this says open, and we should rename it to 'activate' or something because it also closes
             }
             storageChest = null;
         }
@@ -154,6 +228,16 @@ public class Player : MonoBehaviour, IDamagable {
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
         //if (currentHealthPoints <= 0) { Destroy(gameObject); } //HIHI I'M NEW
+    }
+
+    public void SetStats(int agility, int strength, int stamina, int intellect)
+    {
+        this.agility = agility + baseAgility;
+        this.strength = strength + baseStrength;
+        this.stamina = stamina + baseStamina;
+        this.intellect = intellect + baseIntellect;
+
+        statsText.text = string.Format("Stamina: {0}\nStrength: {1}\nAgility: {2}\nIntellect: {3}", stamina, strength, agility, intellect);
     }
 
     #endregion

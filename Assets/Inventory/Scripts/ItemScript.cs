@@ -3,33 +3,41 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum ItemType { MANA, HEALTH }; 
-//TOOLTIP
+public enum ItemType { CONSUMABLE, MAINHAND, TWOHAND, OFFHAND, HEAD, NECK, CHEST, RING, BRACERS, LEGS, BOOTS, TRINKETS, GENERIC, GENERICWEAPON }
 public enum Quality {  WEIRD, AWESOME, RARE, GLOWY };
 
 public class ItemScript : MonoBehaviour {
 
-    Player player;
-    public ItemType type;
-    //TOOLTIP
-    public Quality quality;
-    public float strength, intellect, agility, stamina;
-    public string itemName;
-    public string description;
 
     public Sprite spriteNeutral;
     public Sprite spriteHighlighted;
-    public int maxSize;
-    public int healthHeal;
-    public int manaHeal;
 
-    public void Start()
+    private Item item;
+
+    //public Item Item { get => item; set => item = value; } //part one
+
+    public Item Item //part 2
     {
-        player = FindObjectOfType<Player>();
+        get { return item; }
+        set
+        {
+
+            item = value;
+            spriteHighlighted = Resources.Load<Sprite>(value.SpriteHighlighted);
+            spriteNeutral = Resources.Load<Sprite>(value.SpriteNeutral);
+
+        }
     }
-    public void Use()
+
+    //public void Start()
+    //{
+    //    player = FindObjectOfType<Player>();
+    //}
+    public void Use(Slot slot)
     {
-        switch (type)
+        item.Use(slot, this);
+
+        /*switch (type)
         {
             case ItemType.MANA:
                 Debug.Log("U just used a mana pot!");
@@ -52,7 +60,7 @@ public class ItemScript : MonoBehaviour {
                     }
                 }
                 break;
-        }
+        }*/
     }
     
     //TOOLTIP
@@ -61,51 +69,8 @@ public class ItemScript : MonoBehaviour {
     ///summary
     public string GetToolTip()
     {
-        string stats = string.Empty;
-        string color = string.Empty;
-        string newLine = string.Empty;
-
-        if(description != string.Empty)
-        {
-            newLine = "\n";
-        }
-
-        switch(quality)
-        {
-            case Quality.WEIRD:
-                color = "magenta";
-                break;
-            case Quality.AWESOME:
-                color = "purple";
-                break;
-            case Quality.RARE:
-                color = "orange";
-                break;
-            case Quality.GLOWY:
-                color = "aqua";
-                break;
-            default:
-                break;
-        }
-
-        if (strength > 0 )
-        {
-            stats += "\n" + strength.ToString() + " Strength";
-        }
-        if (intellect > 0)
-        {
-            stats += "\n" + intellect.ToString() + " Intellect";
-        }
-        if (agility > 0)
-        {
-            stats += "\n" + agility.ToString() + " Agility";
-        }
-        if (stamina > 0)
-        {
-            stats += "\n" + stamina.ToString() + " Staamina";
-        }
-
-        return string.Format("<size=16><color=" + color + ">{0}</color></size><size=14><color=#add8e6ff><i>" + newLine + "{1} </i></color><color=#ffffffff>{2}</color></size>", itemName, description, stats);
+        return item.GetTooltip();
+        
     }
 }
 

@@ -1,0 +1,71 @@
+﻿<?xml version="1.0" encoding="Windows-1252"?>
+<ItemContainer xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Consumeables>
+    <Item xsi:type="Consumeable">
+      <ItemType>CONSUMEABLE</ItemType>
+      <Quality>COMMON</Quality>
+      <SpriteNeutral>Consumeables/HealthNormal</SpriteNeutral>
+      <SpriteHighlighted>Consumeables/HealthHighlight</SpriteHighlighted>
+      <MaxSize>5</MaxSize>
+      <ItemName>Health potion</ItemName>
+      <Description>This potion restores health</Description>
+      <Health>10</Health>
+      <Mana>0</Mana>
+    </Item>
+    <Item xsi:type="Consumeable">
+      <ItemType>CONSUMEABLE</ItemType>
+      <Quality>COMMON</Quality>
+      <SpriteNeutral>Consumeables/ManaNormal</SpriteNeutral>
+      <SpriteHighlighted>Consumeables/ManaHighlight</SpriteHighlighted>
+      <MaxSize>5</MaxSize>
+      <ItemName>Mana Potion</ItemName>
+      <Description>This potion restores mana</Description>
+      <Health>0</Health>
+      <Mana>10</Mana>
+    </Item>
+  </Consumeables>
+  <Weapons>
+    <Item xsi:type="Weapon">
+      <ItemType>TWOHAND</ItemType>
+      <Quality>EPIC</Quality>
+      <SpriteNeutral>Weapons/SwordNormal</SpriteNeutral>
+      <SpriteHighlighted>Weapons/SwordHighlight</SpriteHighlighted>
+      <MaxSize>1</MaxSize>
+      <ItemName>Awesome Sword</ItemName>
+      <Description>This is an awesome sword</Description>
+      <Intellect>35</Intellect>
+      <Agility>10</Agility>
+      <Stamina>14</Stamina>
+      <Strength>25</Strength>
+      <AttackSpeed>5</AttackSpeed>
+    </Item>
+  </Weapons>
+  <Equipment>
+    <Item xsi:type="Equipment">
+      <ItemType>HEAD</ItemType>
+      <Quality>UNCOMMON</Quality>
+      <SpriteNeutral>Equipment/HelmetNormal</SpriteNeutral>
+      <SpriteHighlighted>Equipment/HelmetHighlight</SpriteHighlighted>
+      <MaxSize>1</MaxSize>
+      <ItemName>Strong helmet</ItemName>
+      <Description>This is a good helmet</Description>
+      <Intellect>2</Intellect>
+      <Agility>5</Agility>
+      <Stamina>4</Stamina>
+      <Strength>6</Strength>
+    </Item>
+    <Item xsi:type="Equipment">
+      <ItemType>CHEST</ItemType>
+      <Quality>RARE</Quality>
+      <SpriteNeutral>Equipment/ChestNormal</SpriteNeutral>
+      <SpriteHighlighted>Equipment/ChestHighlight</SpriteHighlighted>
+      <MaxSize>1</MaxSize>
+      <ItemName>Iron Chest</ItemName>
+      <Description>This is an ok chest</Description>
+      <Intellect>6</Intellect>
+      <Agility>4</Agility>
+      <Stamina>2</Stamina>
+      <Strength>6</Strength>
+    </Item>
+  </Equipment>
+</ItemContainer>

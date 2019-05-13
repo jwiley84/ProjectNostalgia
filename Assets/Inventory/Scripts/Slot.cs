@@ -14,7 +14,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler
     public Sprite slotEmpty; //this is to make sure we can indicate an empty slot
     public Sprite slotHighlight; //this is to fill the slot
 
-    private CanvasGroup canvasGroup; //418
+    private CanvasGroup canvasGroup;
+
+    public ItemType canContain; // 5/9
     #endregion
 
 
@@ -25,14 +27,14 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         get { return items.Count == 0; }
     }
 
-    public ItemScript currentItem
+    public ItemScript CurrentItem
     {
         get { return items.Peek(); }
     }
 
     public bool isAvailable
     {
-        get { return currentItem.maxSize > items.Count; }
+        get { return CurrentItem.Item.MaxSize > items.Count; }
     }
 
     public Stack<ItemScript> Items
@@ -67,7 +69,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         if (transform.parent != null)
         {
             canvasGroup = transform.parent.GetComponent<CanvasGroup>();
-            print(canvasGroup);
+            //print(canvasGroup);
         }
        
     }
@@ -114,7 +116,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
     {
         this.items = new Stack<ItemScript>(items); //this line will take the items currently in the slot and replace them with new ones
         stackText.text = items.Count > 1 ? items.Count.ToString() : string.Empty;
-        ChangeSprite(currentItem.spriteNeutral, currentItem.spriteHighlighted);
+        ChangeSprite(CurrentItem.spriteNeutral, CurrentItem.spriteHighlighted);
     }
 
     private void UseItem()
@@ -123,7 +125,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
 
         if (!isEmpty)
         {
-            items.Pop().Use();//removes from stack
+            items.Peek().Use(this);//removes from stack
 
             //updates text on item
             stackText.text = items.Count > 1 ? items.Count.ToString() : string.Empty; //smart if statement or one-line if statement
@@ -131,7 +133,8 @@ public class Slot : MonoBehaviour, IPointerClickHandler
             if (isEmpty)
             {
                 ChangeSprite(slotEmpty, slotHighlight);
-                Inventory.EmptySlots++;
+                transform.parent.GetComponent<Inventory>().EmptySlots++;
+                //Inventory.EmptySlots++;
             }
         }
     }
@@ -185,5 +188,36 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         items.Clear();
         ChangeSprite(slotEmpty, slotHighlight);
         stackText.text = string.Empty;
+    }
+
+    public static void SwapItems(Slot from, Slot to)
+    {
+        ItemType movingType = from.CurrentItem.Item.ItemType;
+
+        if (to != null && from != null)
+        {
+            if (movingType == ItemType.MAINHAND || movingType == ItemType.TWOHAND && CharacterPanel.PanelInstance.OffHandSlot.isEmpty)
+            {
+                movingType = ItemType.GENERICWEAPON;
+            }
+            if (to.canContain == ItemType.GENERIC || movingType == to.canContain)
+            {
+                if (movingType != ItemType.OFFHAND || CharacterPanel.PanelInstance.WeaponSlot.isEmpty || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.TWOHAND)
+                {
+                    Stack<ItemScript> tmpTo = new Stack<ItemScript>(to.Items); //changed 
+                    to.AddItems(from.Items); // changed
+
+                    if (tmpTo.Count == 0) //if you move a stack to an empty slot
+                    {
+                        to.transform.parent.GetComponent<Inventory>().EmptySlots--;//new
+                        from.ClearSlot(); //changed.
+                    }
+                    else
+                    {
+                        from.AddItems(tmpTo); //changed.
+                    }
+                }
+            }
+        }
     }
 }

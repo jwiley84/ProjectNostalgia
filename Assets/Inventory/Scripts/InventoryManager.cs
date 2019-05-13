@@ -1,5 +1,9 @@
-﻿using System.Collections;
+﻿using Assets.Inventory.Scripts.ItemScripts;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -14,6 +18,10 @@ public class InventoryManager : MonoBehaviour
     public GameObject iconPrefab;
     public GameObject toolTipObject;
     public GameObject selectStackSize;
+    /// <summary>
+    /// This object is used for instantiating items
+    /// </summary>
+    public GameObject itemObject;
 
     public Text sizeTextObject;
     public Text visualTextObject;
@@ -32,6 +40,11 @@ public class InventoryManager : MonoBehaviour
 
     private GameObject clicked;
     private GameObject hoverObject;
+
+    /// <summary>
+    /// This item container contains all the items in the game
+    /// </summary>
+    private ItemContainer itemContainer = new ItemContainer();
     #endregion
 
     #region skip
@@ -49,7 +62,7 @@ public class InventoryManager : MonoBehaviour
     public GameObject health;
     #endregion
 
-    // pause before doing these. Look at the amount of errors.
+    
     #region Properties
     public static InventoryManager Instance
     {
@@ -157,15 +170,23 @@ public class InventoryManager : MonoBehaviour
     }
 
 
-    // these are properties stolen from Inventory.cs
+    public ItemContainer ItemContainer
+    {
+        get { return itemContainer; }
+        set { itemContainer = value; }
+    }
 
     #endregion
 
     #region Methods
-    // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
-        
+        //Loads all the items from the XML document
+        Type[] itemTypes = { typeof(Equipment), typeof(Weapon), typeof(Consumable) };
+        XmlSerializer serializer = new XmlSerializer(typeof(ItemContainer), itemTypes);
+        TextReader textReader = new StreamReader(Application.streamingAssetsPath + "/Items.xml");
+        itemContainer = (ItemContainer)serializer.Deserialize(textReader);
+        textReader.Close();
     }
 
     // Update is called once per frame
@@ -185,5 +206,24 @@ public class InventoryManager : MonoBehaviour
         this.maxStackCount = maxStackCount;
         stackText.text = splitAmt.ToString();
     }
+
+    public void Save()
+    {
+        GameObject[] inventories = GameObject.FindGameObjectsWithTag("Inventory");
+        foreach (GameObject inventory in inventories)
+        {
+            inventory.GetComponent<Inventory>().SaveInventory();
+        }
+    }
+
+    public void Load()
+    {
+        GameObject[] inventories = GameObject.FindGameObjectsWithTag("Inventory");
+        foreach (GameObject inventory in inventories)
+        {
+            inventory.GetComponent<Inventory>().LoadInventory();
+        }
+    }
+
     #endregion
 }
