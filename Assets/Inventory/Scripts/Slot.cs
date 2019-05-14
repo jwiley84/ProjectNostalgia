@@ -196,13 +196,14 @@ public class Slot : MonoBehaviour, IPointerClickHandler
 
         if (to != null && from != null)
         {
-            if (movingType == ItemType.MAINHAND || movingType == ItemType.TWOHAND && CharacterPanel.PanelInstance.OffHandSlot.isEmpty)
+            // ATTACK! Added THE MASSIVE () SECTION BELOW
+            if (movingType == ItemType.MAINHAND || (movingType == ItemType.TWOHAND || movingType == ItemType.RANGED || movingType == ItemType.MAGIC) && CharacterPanel.PanelInstance.OffHandSlot.isEmpty)
             {
                 movingType = ItemType.GENERICWEAPON;
             }
             if (to.canContain == ItemType.GENERIC || movingType == to.canContain)
             {
-                if (movingType != ItemType.OFFHAND || CharacterPanel.PanelInstance.WeaponSlot.isEmpty || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.TWOHAND)
+                if (movingType != ItemType.OFFHAND || CharacterPanel.PanelInstance.WeaponSlot.isEmpty || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.TWOHAND || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType !=  ItemType.MAGIC || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType !=  ItemType.RANGED)
                 {
                     Stack<ItemScript> tmpTo = new Stack<ItemScript>(to.Items); //changed 
                     to.AddItems(from.Items); // changed

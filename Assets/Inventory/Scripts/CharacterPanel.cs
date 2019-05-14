@@ -1,7 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using System;
 
 public class CharacterPanel : Inventory
 {
@@ -9,6 +7,8 @@ public class CharacterPanel : Inventory
     public Slot[] equipmentSlots;
 
     private static CharacterPanel instance;
+    private bool twoHanded = false; // ATTACK!  
+
 
     public static CharacterPanel PanelInstance
     {
@@ -39,13 +39,15 @@ public class CharacterPanel : Inventory
 
     public void EquipItem(Slot slot, ItemScript item)
     {
-        if (item.Item.ItemType == ItemType.MAINHAND || item.Item.ItemType == ItemType.TWOHAND && OffHandSlot.isEmpty)
+        // ATTACK! Added MASSIVE () SECTION BELOW
+
+        if (item.Item.ItemType == ItemType.MAINHAND || (item.Item.ItemType == ItemType.TWOHAND || item.Item.ItemType == ItemType.RANGED || item.Item.ItemType == ItemType.MAGIC) && OffHandSlot.isEmpty )
         {
             Slot.SwapItems(slot, WeaponSlot);
         }
-        
-        
-        else 
+
+
+        else
         {
             Slot.SwapItems(slot, Array.Find(equipmentSlots, x => x.canContain == item.Item.ItemType));
         }
@@ -56,7 +58,6 @@ public class CharacterPanel : Inventory
     {
         Slot tmpSlot = slot.GetComponent<Slot>();
         //if (!tmpSlot.isEmpty && InventoryManager.Instance.HoverObject == null)
-        print("I hit CharacterPanel showtooltip");
 
         if (slot.GetComponentInParent<Inventory>().IsOpen && !tmpSlot.isEmpty && InventoryManager.Instance.HoverObject == null && !InventoryManager.Instance.selectStackSize.activeSelf)
         {//added the "isOpen" to beginning of the above line
@@ -91,5 +92,55 @@ public class CharacterPanel : Inventory
             }
         }
         Player.Instance.SetStats(agility, strength, stamina, intellect);
+    }
+
+    public override void SaveInventory()
+    {
+        print("i'm saving the Char panel!");
+        string content = string.Empty; //stolen
+        for (int i = 0; i < equipmentSlots.Length; i++) // type 'for' and tabtab
+        {
+            if (!equipmentSlots[i].isEmpty) // if + tabtab
+            {
+                content += i + "-" + equipmentSlots[i].Items.Peek().Item.ItemName + ";"; //stolen and altered
+                PlayerPrefs.SetString("CharPanel", content); //stolen and altered
+                PlayerPrefs.Save(); //stolen
+            }
+        }
+    }
+
+    public override void LoadInventory()
+    {
+        print("i'm loading the Char panel!");
+        //foreach (Slot slot in equipmentSlots)
+        //{
+        //    slot.ClearSlot();
+        //}
+
+        string content = PlayerPrefs.GetString("CharPanel"); //stolen and altered
+        string[] splitContent = content.Split(';'); //stolen
+
+        for (int i = 0; i < content.Length - 1; i++)
+        {
+            string[] splitValues = splitContent[i].Split('-'); //stolen
+            int index = Int32.Parse(splitValues[0]); //stolen
+            string itemName = splitValues[1]; //stolen
+            GameObject loadedItem = Instantiate(InventoryManager.Instance.itemObject); //stolen
+
+            loadedItem.AddComponent<ItemScript>(); //stolen
+
+            if (index == 8 || index == 11) //remember, Arik has different indexes for his weapon slot 
+            {
+                loadedItem.GetComponent<ItemScript>().Item = InventoryManager.Instance.ItemContainer.Weapons.Find(x => x.ItemName == itemName);
+            }
+            else
+            {
+                loadedItem.GetComponent<ItemScript>().Item = InventoryManager.Instance.ItemContainer.Equipment.Find(x => x.ItemName == itemName);
+            }
+
+            equipmentSlots[index].AddItem(loadedItem.GetComponent<ItemScript>());
+            Destroy(loadedItem);
+            CalcStats();
+        }
     }
 }

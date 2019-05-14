@@ -282,17 +282,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   categeory: 1
-  itemType: 1
-  quality: 2
-  spriteNeutral: Weapons/03a-parchment
-  spriteHighlighted: Weapons/03a-parchmentborder
-  itemName: LongSword
-  description: Bleh sword!
+  itemType: 4
+  quality: 3
+  attackType: 0
+  spriteNeutral: Equipment/04-parchment
+  spriteHighlighted: Equipment/04-parchmentborder
+  itemName: Weirdly Glowing Helmet
+  description: Should you be putting this on your head?
   maxSize: 1
-  intellect: 0
-  agility: 10
-  stamina: 5
-  strength: 2
+  intellect: 100
+  agility: 0
+  stamina: 0
+  strength: 0
   attackSpeed: 10
   health: 0
   mana: 0

@@ -1,16 +1,15 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour, IDamagable {
+public class Player : MonoBehaviour, IDamagable
+{
 
     #region Fields
     [SerializeField] float maxHealthPoints = 100f;
     [SerializeField] float maxManaPoints = 100f;
     [SerializeField] float currentManaPoints = 100f;
-    [SerializeField] float damage = 5f;  
-    [SerializeField] float minTimeBetweenHits = 0.5f;  
+    [SerializeField] float damage = 5f;
+    [SerializeField] float minTimeBetweenHits = 0.5f;
     [SerializeField] float maxAttackRange = 1.5f;
 
     [SerializeField] int enemyLayer = 9;
@@ -28,7 +27,7 @@ public class Player : MonoBehaviour, IDamagable {
     private int strength;
     private int stamina;
 
-    private static Player instance; 
+    private static Player instance;
 
     public static Player Instance
     {
@@ -44,22 +43,19 @@ public class Player : MonoBehaviour, IDamagable {
 
     private Inventory storageChest; //418
 
-    GameObject currentTarget;  
+    GameObject currentTarget;
 
-    CameraRaycaster cameraRaycaster;  
+    CameraRaycaster cameraRaycaster;
 
     float _mLastHitTime = 0f;
     float currentHealthPoints;
-
-    //this is where we're going to put variables to check for attack item (book, sword, bow)
-
-
+    
     #endregion
 
     #region Properties
-    public float healthAsPercentage { get { return currentHealthPoints / maxHealthPoints; }}
+    public float healthAsPercentage { get { return currentHealthPoints / maxHealthPoints; } }
 
-    public float manaAsPercentage { get { return currentManaPoints / maxManaPoints; }}
+    public float manaAsPercentage { get { return currentManaPoints / maxManaPoints; } }
 
     public float CurrentManaPoints
     {
@@ -88,15 +84,20 @@ public class Player : MonoBehaviour, IDamagable {
 
     #region Methods
 
-    void Start() 
+    void Start()
     {
         cameraRaycaster = FindObjectOfType<CameraRaycaster>();
         cameraRaycaster.notifyMouseClickObservers += OnMouseClick;
         currentHealthPoints = maxHealthPoints;
         SetStats(0, 0, 0, 0);
+
+
+
     }
     void Update()//418
     {
+
+        //HandleMovement(); // this is only temporary
         if (Input.GetKeyDown("i"))//418
         {
             inventory.Open();
@@ -108,7 +109,7 @@ public class Player : MonoBehaviour, IDamagable {
             {
                 storageChest.Open();
             }
-            
+
         }
         if (Input.GetKeyDown("c"))
         {
@@ -118,30 +119,65 @@ public class Player : MonoBehaviour, IDamagable {
             }
 
         }
+        Armed();
     }
+    public void Armed()
+    {
+        if (!CharacterPanel.PanelInstance.WeaponSlot.isEmpty) //ATTACK!
+        {
+            ItemType weapon = CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType;
 
-    void OnMouseClick(RaycastHit raycastHit, int layerHit) 
+            ////do a switch case check for weapon type
+            switch (weapon)
+            {
+                case ItemType.MAINHAND:
+                    //case: sword:
+                    //change maxAttackRange to low
+                    maxAttackRange = 1.5f;
+                    //change attack damage to med
+                    damage = 5f;
+                    //change speed to Low
+                    minTimeBetweenHits = 0.5f;
+                    break;
+                case ItemType.RANGED:
+                    //case: bow:
+                    //change maxAttackRange to high
+                    maxAttackRange = 4f;
+                    //change attack damage to low
+                    damage = 2f;
+                    //change speed to med
+                    minTimeBetweenHits = 0.2f;
+                    break;
+                case ItemType.MAGIC:
+                    //case fire:
+                    //change maxAttackRange to med
+                    maxAttackRange = 2f;
+                    //change attack damage to high
+                    damage = 7f;
+                    //change speed to med
+                    minTimeBetweenHits = 0.7f;
+                    break;
+                case ItemType.TWOHAND:
+                    //case TWOHAND:
+                    //change maxAttackRange to med
+                    maxAttackRange = 1.5f;
+                    //change attack damage to high
+                    damage = 10f;
+                    //change speed to med
+                    minTimeBetweenHits = 1f;
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+    void OnMouseClick(RaycastHit raycastHit, int layerHit)
     {
         if (layerHit == enemyLayer)
         {
-            //do a switch case check for weapon type
-            //case: sword:
-            //change maxAttackRange to low
-            //change attack damage to med
-            //change speed to Low
-
-            //case: bow:
-            //change maxAttackRange to high
-            //change attack damage to low
-            //change speed to med
-
-            //case fire:
-            //change maxAttackRange to med
-            //change attack damage to high
-            //change speed to med
             var enemy = raycastHit.collider.gameObject;
             print("huzzah! " + enemy);
-            
+
             if ((enemy.transform.position - transform.position).magnitude > maxAttackRange)
             {
                 return;
@@ -153,7 +189,7 @@ public class Player : MonoBehaviour, IDamagable {
                 enemyComponent.TakeDamage(damage);
                 _mLastHitTime = Time.time;
             }
-            
+
         }
     }
     /// <summary>
@@ -163,56 +199,44 @@ public class Player : MonoBehaviour, IDamagable {
     /// <param name="other"></param>
     private void OnTriggerEnter(Collider other) //checking if the item we're running into has a box collider
     {
-       if (other.tag == "Item")
+        if (other.tag == "Item")
         {
-            ///Picks a random category, consumeable, equipment, weapons
-            int randomType = UnityEngine.Random.Range(0, 3);
-
-            //instantiates for adding to the inventory
-            GameObject tmp = Instantiate(InventoryManager.Instance.itemObject);
-
-            //Adds the item script to the object
+            GameObject tmp = Instantiate(InventoryManager.Instance.itemObject); // ATTACK!! We refactored this to make it smaller
             tmp.AddComponent<ItemScript>();
-
-            //variable for selecting an item inside the category
-            int randomItem;
-
-            // allows access to the variables (the sprites) in itemscript
-            //tmp.AddComponent<ItemScript>();
-
             ItemScript newEquipment = tmp.GetComponent<ItemScript>();
 
-            switch (randomType) //Selects an item
+            if (other.name == "HealthCube")
             {
-                case 0:
-                    //Selects an item
-                    randomItem = UnityEngine.Random.Range(0, InventoryManager.Instance.ItemContainer.Consumables.Count);
-
-                    //Finds the item in the list
-                    newEquipment.Item = InventoryManager.Instance.ItemContainer.Consumables[randomItem];
-                    break;
-
-                case 1:
-                    randomItem = UnityEngine.Random.Range(0, InventoryManager.Instance.ItemContainer.Weapons.Count);
-                    newEquipment.Item = InventoryManager.Instance.ItemContainer.Weapons[randomItem];
-                    break;
-                case 2:
-
-                    randomItem = UnityEngine.Random.Range(0, InventoryManager.Instance.ItemContainer.Equipment.Count);
-                    newEquipment.Item = InventoryManager.Instance.ItemContainer.Equipment[randomItem];
-                    break;
+                int itemCount = InventoryManager.Instance.ItemContainer.Consumables.Count;
+                newEquipment.Item = InventoryManager.Instance.ItemContainer.Consumables[Rando(itemCount)];
             }
-
+            else if (other.name == "WeaponsCube")
+            {
+                int itemCount = InventoryManager.Instance.ItemContainer.Weapons.Count;
+                newEquipment.Item = InventoryManager.Instance.ItemContainer.Weapons[Rando(itemCount)];
+            }
+            else if (other.name == "EquipmentCube")
+            {
+                int itemCount = InventoryManager.Instance.ItemContainer.Weapons.Count;
+                newEquipment.Item = InventoryManager.Instance.ItemContainer.Equipment[Rando(itemCount)];
+            }
             inventory.AddItem(newEquipment);
             Destroy(tmp);
         }
-       else if (other.tag == "Container") //Arik's will say 'chest'
+        else if (other.tag == "Container")
         {
-            storageChest = other.GetComponent<ChestScript>().chestInventory;  //418 yess this will yell for a bit
+            storageChest = other.GetComponent<ChestScript>().chestInventory;
         }
     }
 
-    private void OnTriggerExit(Collider other)//423? Maybe?
+    private int Rando(int itemCount)
+    {
+        int randomType = UnityEngine.Random.Range(0, 3);
+        int randomItem = UnityEngine.Random.Range(0, itemCount);
+        return randomItem;
+    }
+
+    private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "Container")
         {
@@ -240,5 +264,16 @@ public class Player : MonoBehaviour, IDamagable {
         statsText.text = string.Format("Stamina: {0}\nStrength: {1}\nAgility: {2}\nIntellect: {3}", stamina, strength, agility, intellect);
     }
 
+
+    #endregion
+
+    #region newSceneMovement
+    public float speed;
+
+    private void HandleMovement()
+    {
+        float translation = speed * Time.deltaTime;
+        transform.Translate(new Vector3(Input.GetAxis("Horizontal") * translation, 0, Input.GetAxis("Vertical") * translation));
+    }
     #endregion
 }

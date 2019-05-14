@@ -209,6 +209,7 @@ public class InventoryManager : MonoBehaviour
 
     public void Save()
     {
+        
         GameObject[] inventories = GameObject.FindGameObjectsWithTag("Inventory");
         foreach (GameObject inventory in inventories)
         {
@@ -218,6 +219,7 @@ public class InventoryManager : MonoBehaviour
 
     public void Load()
     {
+        
         GameObject[] inventories = GameObject.FindGameObjectsWithTag("Inventory");
         foreach (GameObject inventory in inventories)
         {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public enum ItemType { CONSUMABLE, MAINHAND, TWOHAND, OFFHAND, HEAD, NECK, CHEST, RING, BRACERS, LEGS, BOOTS, TRINKETS, GENERIC, GENERICWEAPON }
+public enum ItemType { CONSUMABLE, MAINHAND, TWOHAND, OFFHAND, HEAD, NECK, CHEST, RING, BRACERS, LEGS, BOOTS, TRINKETS, GENERIC, GENERICWEAPON, RANGED, MAGIC }
 public enum Quality {  WEIRD, AWESOME, RARE, GLOWY };
 
 public class ItemScript : MonoBehaviour {
@@ -13,10 +13,8 @@ public class ItemScript : MonoBehaviour {
     public Sprite spriteHighlighted;
 
     private Item item;
-
-    //public Item Item { get => item; set => item = value; } //part one
-
-    public Item Item //part 2
+    
+    public Item Item
     {
         get { return item; }
         set
@@ -29,10 +27,6 @@ public class ItemScript : MonoBehaviour {
         }
     }
 
-    //public void Start()
-    //{
-    //    player = FindObjectOfType<Player>();
-    //}
     public void Use(Slot slot)
     {
         item.Use(slot, this);
@@ -63,7 +57,6 @@ public class ItemScript : MonoBehaviour {
         }*/
     }
     
-    //TOOLTIP
     ///summary
     /// create item for tooltip
     ///summary

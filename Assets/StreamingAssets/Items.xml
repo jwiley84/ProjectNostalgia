@@ -3,7 +3,7 @@
   <Weapons>
     <Item xsi:type="Weapon">
       <ItemType>MAINHAND</ItemType>
-      <Quality>RARE</Quality>
+      <Quality>WEIRD</Quality>
       <SpriteNeutral>Weapons/03a-parchment</SpriteNeutral>
       <SpriteHighlighted>Weapons/03a-parchmentborder</SpriteHighlighted>
       <ItemName>LongSword</ItemName>
@@ -13,23 +13,52 @@
       <Stamina>10</Stamina>
       <Strength>5</Strength>
       <Agility>2</Agility>
+      <AttackSpeed>10</AttackSpeed>
+    </Item>
+    <Item xsi:type="Weapon">
+      <ItemType>TWOHAND</ItemType>
+      <Quality>WEIRD</Quality>
+      <SpriteNeutral>Weapons/02b-parchment</SpriteNeutral>
+      <SpriteHighlighted>Weapons/02b-parchmentborder</SpriteHighlighted>
+      <ItemName>2H Hammer</ItemName>
+      <Description>What are you, a blacksmith?</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>0</Intellect>
+      <Stamina>0</Stamina>
+      <Strength>5</Strength>
+      <Agility>5</Agility>
+      <AttackSpeed>10</AttackSpeed>
+    </Item>
+    <Item xsi:type="Weapon">
+      <ItemType>RANGED</ItemType>
+      <Quality>GLOWY</Quality>
+      <SpriteNeutral>Weapons/14c-parchment</SpriteNeutral>
+      <SpriteHighlighted>Weapons/14c-parchmentborder</SpriteHighlighted>
+      <ItemName>Throwing coins</ItemName>
+      <Description>Did you just throw a sickle at me?</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>10</Intellect>
+      <Stamina>5</Stamina>
+      <Strength>0</Strength>
+      <Agility>0</Agility>
+      <AttackSpeed>10</AttackSpeed>
+    </Item>
+    <Item xsi:type="Weapon">
+      <ItemType>MAGIC</ItemType>
+      <Quality>AWESOME</Quality>
+      <SpriteNeutral>Weapons/bonus1-parchment</SpriteNeutral>
+      <SpriteHighlighted>Weapons/bonus1-parchmentborder</SpriteHighlighted>
+      <ItemName>Magic Staff</ItemName>
+      <Description>You only hope it works the way you think it should</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>20</Intellect>
+      <Stamina>5</Stamina>
+      <Strength>0</Strength>
+      <Agility>0</Agility>
+      <AttackSpeed>10</AttackSpeed>
     </Item>
   </Weapons>
   <Equipment>
-    
-    <Item xsi:type="Equipment">
-      <ItemType>HEAD</ItemType>
-      <Quality>WEIRD</Quality>
-      <SpriteNeutral>Equipment/04-parchment</SpriteNeutral>
-      <SpriteHighlighted>Equipment/04-parchmentborder</SpriteHighlighted>
-      <ItemName>Sturdy Helm</ItemName>
-      <Description>It's sturdy</Description>
-      <MaxSize>1</MaxSize>
-      <Intellect>0</Intellect>
-      <Stamina>5</Stamina>
-      <Strength>5</Strength>
-      <Agility>2</Agility>
-    </Item>
     <Item xsi:type="Equipment">
       <ItemType>OFFHAND</ItemType>
       <Quality>GLOWY</Quality>
@@ -42,6 +71,19 @@
       <Stamina>100</Stamina>
       <Strength>100</Strength>
       <Agility>100</Agility>
+    </Item>
+    <Item xsi:type="Equipment">
+      <ItemType>HEAD</ItemType>
+      <Quality>GLOWY</Quality>
+      <SpriteNeutral>Equipment/04-parchment</SpriteNeutral>
+      <SpriteHighlighted>Equipment/04-parchmentborder</SpriteHighlighted>
+      <ItemName>Weirdly Glowing Helmet</ItemName>
+      <Description>Should you be putting this on your head?</Description>
+      <MaxSize>1</MaxSize>
+      <Intellect>100</Intellect>
+      <Stamina>0</Stamina>
+      <Strength>0</Strength>
+      <Agility>0</Agility>
     </Item>
   </Equipment>
   <Consumables>
