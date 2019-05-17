@@ -91,8 +91,6 @@ public class Player : MonoBehaviour, IDamagable
         currentHealthPoints = maxHealthPoints;
         SetStats(0, 0, 0, 0);
 
-
-
     }
     void Update()//418
     {
@@ -230,8 +228,7 @@ public class Player : MonoBehaviour, IDamagable
     }
 
     private int Rando(int itemCount)
-    {
-        int randomType = UnityEngine.Random.Range(0, 3);
+    {      
         int randomItem = UnityEngine.Random.Range(0, itemCount);
         return randomItem;
     }

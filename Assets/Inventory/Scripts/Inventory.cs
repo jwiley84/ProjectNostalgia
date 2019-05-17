@@ -178,6 +178,7 @@ public class Inventory : MonoBehaviour
         InventoryManager.Instance.toolTipObject.SetActive(false);
     }
 
+    
     /// <summary>
     /// Saves the inventory and its content
     /// </summary>

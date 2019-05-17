@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -43,16 +42,17 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         set { items = value; }
     }
     #endregion
-    
+
     void Awake()
     {
         items = new Stack<ItemScript>(); //instansiate a new stack
     }
-    
-    // Use this for initialization
-    void Start () {
 
-        
+    // Use this for initialization
+    void Start()
+    {
+
+
         RectTransform slotRect = GetComponent<RectTransform>(); //this is to get the slot itself
         RectTransform txtRect = stackText.GetComponent<RectTransform>(); //this is to get the text object on the slot
 
@@ -71,13 +71,14 @@ public class Slot : MonoBehaviour, IPointerClickHandler
             canvasGroup = transform.parent.GetComponent<CanvasGroup>();
             //print(canvasGroup);
         }
-       
+
     }
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     private void ChangeSprite(Sprite neutral, Sprite hightlightSprite)
     {
@@ -88,9 +89,9 @@ public class Slot : MonoBehaviour, IPointerClickHandler
         st.highlightedSprite = hightlightSprite; //if the slot state is highlighted, use the highlighted sprite
 
         st.pressedSprite = neutral; //if the slot is pressed, use the neutral version
-        //print("this is the sprite state");
-        //print(st.ToString());
-        
+                                    //print("this is the sprite state");
+                                    //print(st.ToString());
+
         GetComponent<Button>().spriteState = st; //get the button's sprites's current state and set to st
 
     }
@@ -162,7 +163,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
-   
+
         /*if (eventData.)*/
         if (eventData.button == PointerEventData.InputButton.Right && !GameObject.Find("Hover") && canvasGroup.alpha > 0)//418 (replaced Inventory.CanvasGroup)
         {
@@ -203,7 +204,7 @@ public class Slot : MonoBehaviour, IPointerClickHandler
             }
             if (to.canContain == ItemType.GENERIC || movingType == to.canContain)
             {
-                if (movingType != ItemType.OFFHAND || CharacterPanel.PanelInstance.WeaponSlot.isEmpty || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.TWOHAND || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType !=  ItemType.MAGIC || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType !=  ItemType.RANGED)
+                if (movingType != ItemType.OFFHAND || CharacterPanel.PanelInstance.WeaponSlot.isEmpty || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.TWOHAND || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.MAGIC || CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType != ItemType.RANGED)
                 {
                     Stack<ItemScript> tmpTo = new Stack<ItemScript>(to.Items); //changed 
                     to.AddItems(from.Items); // changed
