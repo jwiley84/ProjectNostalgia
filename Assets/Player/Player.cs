@@ -50,6 +50,7 @@ public class Player : MonoBehaviour, IDamagable
     float _mLastHitTime = 0f;
     float currentHealthPoints;
     
+
     #endregion
 
     #region Properties
@@ -116,11 +117,12 @@ public class Player : MonoBehaviour, IDamagable
                 charPanel.Open();
             }
 
-        }
+        }//this girl is driving me nuts
         Armed();
     }
     public void Armed()
     {
+
         if (!CharacterPanel.PanelInstance.WeaponSlot.isEmpty) //ATTACK!
         {
             ItemType weapon = CharacterPanel.PanelInstance.WeaponSlot.CurrentItem.Item.ItemType;
@@ -147,7 +149,7 @@ public class Player : MonoBehaviour, IDamagable
                     minTimeBetweenHits = 0.2f;
                     break;
                 case ItemType.MAGIC:
-                    //case fire:
+                    //case fire
                     //change maxAttackRange to med
                     maxAttackRange = 2f;
                     //change attack damage to high
@@ -228,7 +230,7 @@ public class Player : MonoBehaviour, IDamagable
     }
 
     private int Rando(int itemCount)
-    {      
+    {
         int randomItem = UnityEngine.Random.Range(0, itemCount);
         return randomItem;
     }

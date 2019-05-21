@@ -13,7 +13,8 @@ public class ItemScript : MonoBehaviour {
     public Sprite spriteHighlighted;
 
     private Item item;
-    
+
+
     public Item Item
     {
         get { return item; }

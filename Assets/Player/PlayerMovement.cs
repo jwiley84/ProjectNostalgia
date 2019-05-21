@@ -16,10 +16,7 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] const int walkableLayerNumber = 8;
     [SerializeField] const int enemyLayerNumber = 9;
-
-    //GameObject enemy = null;
-
-    //it's added down here because all the public goes together, all the variables together and all the private, etc 10-25
+    
     bool isInDirectMode = false; //added 10-25 
     void Start()
     {
@@ -31,10 +28,26 @@ public class PlayerMovement : MonoBehaviour
 
         cameraRaycaster.notifyMouseClickObservers += ProcessMouseClick;
     }
+    #region New Methods
+    private void Update()
+    {
+        UpdateAnimator();
+    }
+
+    private void UpdateAnimator()
+    {
+        Vector3 velocity = GetComponent<NavMeshAgent>().velocity;
+        //InverseTransformDirection transforms a direction from world space to local space
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        float speed = localVelocity.z;
+        GetComponent<Animator>().SetFloat("ForwardSpeed", speed);
+        //ForwardSpeed is what we named the Blend on the Blend Tree in the animator
+    }
+    #endregion
+
 
     void ProcessMouseClick(RaycastHit raycastHit, int layerHit)
     {
-        //print("HAHAHAHHA");
         switch (layerHit)
         {
             case enemyLayerNumber:
@@ -42,7 +55,6 @@ public class PlayerMovement : MonoBehaviour
                 aiCharacterControl.SetTarget(enemy.transform);
                 break;
             case walkableLayerNumber:
-                //run up and stop
                 walkTarget.transform.position = raycastHit.point;
                 aiCharacterControl.SetTarget(walkTarget.transform);
                 break;

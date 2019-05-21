@@ -119,10 +119,19 @@ public class CharacterPanel : Inventory
 
         string content = PlayerPrefs.GetString("CharPanel"); //stolen and altered
         string[] splitContent = content.Split(';'); //stolen
-
-        for (int i = 0; i < content.Length - 1; i++)
+        int test = splitContent.Length;
+        for (int i = 0; i < splitContent.Length - 1; i++)
         {
             string[] splitValues = splitContent[i].Split('-'); //stolen
+
+            #region testing
+            foreach (var item in splitValues)
+            {
+                print(item);
+            }
+            #endregion
+
+
             int index = Int32.Parse(splitValues[0]); //stolen
             string itemName = splitValues[1]; //stolen
             GameObject loadedItem = Instantiate(InventoryManager.Instance.itemObject); //stolen
@@ -132,6 +141,11 @@ public class CharacterPanel : Inventory
             if (index == 8 || index == 11) //remember, Arik has different indexes for his weapon slot 
             {
                 loadedItem.GetComponent<ItemScript>().Item = InventoryManager.Instance.ItemContainer.Weapons.Find(x => x.ItemName == itemName);
+                
+                if (index == 8)
+                {
+                    //this is the logic to swapthe the weapons
+                }
             }
             else
             {

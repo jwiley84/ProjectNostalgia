@@ -49,7 +49,7 @@
       <SpriteNeutral>Weapons/bonus1-parchment</SpriteNeutral>
       <SpriteHighlighted>Weapons/bonus1-parchmentborder</SpriteHighlighted>
       <ItemName>Magic Staff</ItemName>
-      <Description>You only hope it works the way you think it should</Description>
+      <Description>You only hope it works</Description>
       <MaxSize>1</MaxSize>
       <Intellect>20</Intellect>
       <Stamina>5</Stamina>

@@ -178,97 +178,6 @@ public class Inventory : MonoBehaviour
         InventoryManager.Instance.toolTipObject.SetActive(false);
     }
 
-    
-    /// <summary>
-    /// Saves the inventory and its content
-    /// </summary>
-    public virtual void SaveInventory()
-    {
-        print("i'm saving the inventory!");
-        string content = string.Empty; //Creates a string for containing info about the items inside the inventory
-
-        for (int i = 0; i < allSlots.Count; i++) //Runs through all slots in the inventory
-        {
-            Slot tmp = allSlots[i].GetComponent<Slot>(); //Careates a reference to the slot at the current index
-
-            if (!tmp.isEmpty) //We only want to save the info if the slot contains an item
-            {
-                //Creates a string with this format: SlotIndex-ItemType-AmountOfItems; this string can be read so that we can rebuild the inventory
-                content += i + "-" + tmp.CurrentItem.Item.ItemName.ToString() + "-" + tmp.Items.Count.ToString() + ";";
-            }
-        }
-
-        //Stores all the info in the PlayerPrefs
-        PlayerPrefs.SetString(gameObject.name + "content", content);
-        PlayerPrefs.SetInt(gameObject.name + "slots", slots);
-        PlayerPrefs.SetInt(gameObject.name + "rows", rows);
-        PlayerPrefs.SetFloat(gameObject.name + "slotPaddingLeft", slotPaddingLeft);
-        PlayerPrefs.SetFloat(gameObject.name + "slotPaddingTop", slotPaddingTop);
-        PlayerPrefs.SetFloat(gameObject.name + "slotSize", slotSize);
-        PlayerPrefs.Save();
-    }
-
-    /// <summary>
-    /// Loads the inventory
-    /// </summary>
-    public virtual void LoadInventory()
-    {
-        print("i'm loading the inventory!");
-        //Loads all the inventory's data InventoryManager.Instance.From the playerprefs
-        string content = PlayerPrefs.GetString(gameObject.name + "content");
-        slots = PlayerPrefs.GetInt(gameObject.name + "slots");
-        rows = PlayerPrefs.GetInt(gameObject.name + "rows");
-        slotPaddingLeft = PlayerPrefs.GetFloat(gameObject.name + "slotPaddingLeft");
-        slotPaddingTop = PlayerPrefs.GetFloat(gameObject.name + "slotPaddingTop");
-        slotSize = PlayerPrefs.GetFloat(gameObject.name + "slotSize");
-        
-        //Recreates the inventory's layout
-        CreateLayout();
-
-        //Splits the loaded content string into segments, so that each index inthe splitContent array contains information about a single slot
-        //e.g[0]0-MANA-3
-        string[] splitContent = content.Split(';');
-
-        //Runs through every single slot we have infor about -1 is to avoid an empty string error
-        for (int x = 0; x < splitContent.Length - 1; x++)
-        {
-            //Splits the slot's information into single values, so that each index in the splitValues array contains info about a value
-            //E.g[0]InventorIndex [1]ITEMTYPE [2]Amount of items
-            string[] splitValues = splitContent[x].Split('-');
-
-            int index = Int32.Parse(splitValues[0]); //InventorIndex 
-
-            string itemName = splitValues[1]; //ITEMTYPE THIS MIGHT BE FUCKED
-
-            int amount = Int32.Parse(splitValues[2]); //Amount of items
-
-            Item tmp = null;
-
-            for (int i = 0; i < amount; i++) //Adds the correct amount of items to the inventory
-            {
-                GameObject loadedItem = Instantiate(InventoryManager.Instance.itemObject);
-
-                if (tmp == null)
-                {
-                    tmp = InventoryManager.Instance.ItemContainer.Consumables.Find(item => item.ItemName == itemName);
-                }
-                if (tmp == null)
-                {
-                    tmp = InventoryManager.Instance.ItemContainer.Equipment.Find(item => item.ItemName == itemName);
-                }
-                if (tmp == null)
-                {
-                    tmp = InventoryManager.Instance.ItemContainer.Weapons.Find(item => item.ItemName == itemName);
-                }
-
-                loadedItem.AddComponent<ItemScript>();
-                loadedItem.GetComponent<ItemScript>().Item = tmp;
-                allSlots[index].GetComponent<Slot>().AddItem(loadedItem.GetComponent<ItemScript>());
-                Destroy(loadedItem);
-            }
-        }
-    }
-
     public virtual void CreateLayout()
     {
         if (allSlots != null)
@@ -611,6 +520,95 @@ public class Inventory : MonoBehaviour
 
             canvasGroup.alpha = 1;
             fadingIn = false;
+        }
+    }
+    /// <summary>
+    /// Saves the inventory and its content
+    /// </summary>
+    public virtual void SaveInventory()
+    {
+        print("i'm saving the inventory!");
+        string content = string.Empty; //Creates a string for containing info about the items inside the inventory
+
+        for (int i = 0; i < allSlots.Count; i++) //Runs through all slots in the inventory
+        {
+            Slot tmp = allSlots[i].GetComponent<Slot>(); //Careates a reference to the slot at the current index
+
+            if (!tmp.isEmpty) //We only want to save the info if the slot contains an item
+            {
+                //Creates a string with this format: SlotIndex-ItemType-AmountOfItems; this string can be read so that we can rebuild the inventory
+                content += i + "-" + tmp.CurrentItem.Item.ItemName.ToString() + "-" + tmp.Items.Count.ToString() + ";";
+            }
+        }
+
+        //Stores all the info in the PlayerPrefs
+        PlayerPrefs.SetString(gameObject.name + "content", content);
+        PlayerPrefs.SetInt(gameObject.name + "slots", slots);
+        PlayerPrefs.SetInt(gameObject.name + "rows", rows);
+        PlayerPrefs.SetFloat(gameObject.name + "slotPaddingLeft", slotPaddingLeft);
+        PlayerPrefs.SetFloat(gameObject.name + "slotPaddingTop", slotPaddingTop);
+        PlayerPrefs.SetFloat(gameObject.name + "slotSize", slotSize);
+        PlayerPrefs.Save();
+    }
+
+    /// <summary>
+    /// Loads the inventory
+    /// </summary>
+    public virtual void LoadInventory()
+    {
+        print("i'm loading the inventory!");
+        //Loads all the inventory's data InventoryManager.Instance.From the playerprefs
+        string content = PlayerPrefs.GetString(gameObject.name + "content");
+        slots = PlayerPrefs.GetInt(gameObject.name + "slots");
+        rows = PlayerPrefs.GetInt(gameObject.name + "rows");
+        slotPaddingLeft = PlayerPrefs.GetFloat(gameObject.name + "slotPaddingLeft");
+        slotPaddingTop = PlayerPrefs.GetFloat(gameObject.name + "slotPaddingTop");
+        slotSize = PlayerPrefs.GetFloat(gameObject.name + "slotSize");
+
+        //Recreates the inventory's layout
+        CreateLayout();
+
+        //Splits the loaded content string into segments, so that each index inthe splitContent array contains information about a single slot
+        //e.g[0]0-MANA-3
+        string[] splitContent = content.Split(';');
+
+        //Runs through every single slot we have infor about -1 is to avoid an empty string error
+        for (int x = 0; x < splitContent.Length - 1; x++)
+        {
+            //Splits the slot's information into single values, so that each index in the splitValues array contains info about a value
+            //E.g[0]InventorIndex [1]ITEMTYPE [2]Amount of items
+            string[] splitValues = splitContent[x].Split('-');
+
+            int index = Int32.Parse(splitValues[0]); //InventorIndex 
+
+            string itemName = splitValues[1]; //ITEMTYPE THIS MIGHT BE FUCKED
+
+            int amount = Int32.Parse(splitValues[2]); //Amount of items
+
+            Item tmp = null;
+
+            for (int i = 0; i < amount; i++) //Adds the correct amount of items to the inventory
+            {
+                GameObject loadedItem = Instantiate(InventoryManager.Instance.itemObject);
+
+                if (tmp == null)
+                {
+                    tmp = InventoryManager.Instance.ItemContainer.Consumables.Find(item => item.ItemName == itemName);
+                }
+                if (tmp == null)
+                {
+                    tmp = InventoryManager.Instance.ItemContainer.Equipment.Find(item => item.ItemName == itemName);
+                }
+                if (tmp == null)
+                {
+                    tmp = InventoryManager.Instance.ItemContainer.Weapons.Find(item => item.ItemName == itemName);
+                }
+
+                loadedItem.AddComponent<ItemScript>();
+                loadedItem.GetComponent<ItemScript>().Item = tmp;
+                allSlots[index].GetComponent<Slot>().AddItem(loadedItem.GetComponent<ItemScript>());
+                Destroy(loadedItem);
+            }
         }
     }
 }

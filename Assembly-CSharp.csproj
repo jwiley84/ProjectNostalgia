@@ -88,6 +88,7 @@
     <Compile Include="Assets\Inventory\Scripts\ItemScripts\Weapon.cs" />
     <Compile Include="Assets\Inventory\Scripts\SizeIssues.cs" />
     <Compile Include="Assets\Inventory\Scripts\Slot.cs" />
+    <Compile Include="Assets\Inventory\Scripts\WeaponSwitcher.cs" />
     <Compile Include="Assets\Mixamo\Magic Pack\Demo\CameraScroll.cs" />
     <Compile Include="Assets\NPCs\DialogSystem.cs" />
     <Compile Include="Assets\NPCs\NPC.cs" />
