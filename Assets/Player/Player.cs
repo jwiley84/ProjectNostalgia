@@ -48,7 +48,8 @@ public class Player : MonoBehaviour, IDamagable
     CameraRaycaster cameraRaycaster;
 
     float _mLastHitTime = 0f;
-    float currentHealthPoints;
+    public float currentHealthPoints;
+    public bool isDed = false;
     
 
     #endregion
@@ -176,7 +177,7 @@ public class Player : MonoBehaviour, IDamagable
         if (layerHit == enemyLayer)
         {
             var enemy = raycastHit.collider.gameObject;
-            print("huzzah! " + enemy);
+            //print("huzzah! " + enemy);
 
             if ((enemy.transform.position - transform.position).magnitude > maxAttackRange)
             {
@@ -186,6 +187,8 @@ public class Player : MonoBehaviour, IDamagable
             var enemyComponent = enemy.GetComponent<Enemy>();
             if (Time.time - _mLastHitTime > minTimeBetweenHits)
             {
+                GetComponent<Animator>().SetTrigger("meleeAttack");
+                print("Ok, hi. I hite for " + damage.ToString() + " damage");
                 enemyComponent.TakeDamage(damage);
                 _mLastHitTime = Time.time;
             }
@@ -250,7 +253,11 @@ public class Player : MonoBehaviour, IDamagable
     public void TakeDamage(float damage)
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
-        //if (currentHealthPoints <= 0) { Destroy(gameObject); } //HIHI I'M NEW
+        if (currentHealthPoints <= 0)
+        {
+            isDed = true;
+            GetComponent<Animator>().SetTrigger("die");
+        }
     }
 
     public void SetStats(int agility, int strength, int stamina, int intellect)

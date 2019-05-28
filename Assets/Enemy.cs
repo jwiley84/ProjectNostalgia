@@ -11,7 +11,7 @@ public class Enemy : MonoBehaviour {
     [SerializeField] GameObject projectileToUse; //NEW
     [SerializeField] GameObject projectileSocket;
     [SerializeField] float damagePerShot = 8f;
-    [SerializeField] float secondsBetweenShots = 0.9f;//Part 3
+    [SerializeField] float secondsBetweenShots = 4.5f;//Part 3
 
     bool isAttacking = false; //Part 3
     float currentHealthPoints;
@@ -42,6 +42,12 @@ public class Enemy : MonoBehaviour {
             //print(gameObject.name + " is attacking!");
             SpawnProjectile(); //TODO slow this down
             InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots); //Part 3
+            if (player.GetComponent<Player>().isDed)
+            {
+                print("he ded");
+                isAttacking = false;
+                CancelInvoke();
+            }
         }
         if (distanceToPlayer > attackRadius) //PART 3
         {

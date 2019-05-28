@@ -5,9 +5,9 @@ using UnityEngine;
 public class WeaponSwitcher : MonoBehaviour
 {
 
-    public GameObject sword; // = GameObject.Find("equippedSword");
-    public GameObject bow; // = GameObject.Find("equippedBow");
-    public GameObject staff; // = GameObject.Find("equippedStaff");
+    public GameObject sword; 
+    public GameObject bow;
+    public GameObject staff;
 
     //find cannot find inactive things, so turn them all on in the game, then use this to shut them off
 

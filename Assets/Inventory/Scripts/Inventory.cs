@@ -606,7 +606,9 @@ public class Inventory : MonoBehaviour
 
                 loadedItem.AddComponent<ItemScript>();
                 loadedItem.GetComponent<ItemScript>().Item = tmp;
+                var test = loadedItem.GetComponent<ItemScript>();
                 allSlots[index].GetComponent<Slot>().AddItem(loadedItem.GetComponent<ItemScript>());
+                var wut = allSlots[index];
                 Destroy(loadedItem);
             }
         }
