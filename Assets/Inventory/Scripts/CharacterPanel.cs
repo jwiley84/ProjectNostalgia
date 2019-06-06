@@ -111,7 +111,6 @@ public class CharacterPanel : Inventory
 
     public override void LoadInventory()
     {
-        print("i'm loading the Char panel!");
         //foreach (Slot slot in equipmentSlots)
         //{
         //    slot.ClearSlot();

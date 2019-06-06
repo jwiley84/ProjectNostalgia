@@ -76,7 +76,6 @@ public class CameraRaycaster : MonoBehaviour
             {
                 if (hit.collider.gameObject.layer == layer)
                 {
-                    //print(layer);
                     return hit; //boom. done
                 }
             }

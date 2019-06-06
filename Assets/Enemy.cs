@@ -10,11 +10,11 @@ public class Enemy : MonoBehaviour {
     [SerializeField] float moveRadius = 10f;
     [SerializeField] GameObject projectileToUse; //NEW
     [SerializeField] GameObject projectileSocket;
-    [SerializeField] float damagePerShot = 8f;
+    [SerializeField] float damagePerShot = 3f;
     [SerializeField] float secondsBetweenShots = 4.5f;//Part 3
 
     bool isAttacking = false; //Part 3
-    float currentHealthPoints;
+    public float currentHealthPoints;
     AICharacterControl aiCharacterControl = null;
     GameObject player = null;
 
@@ -40,14 +40,15 @@ public class Enemy : MonoBehaviour {
         {
             isAttacking = true;
             //print(gameObject.name + " is attacking!");
-            SpawnProjectile(); //TODO slow this down
-            InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots); //Part 3
-            if (player.GetComponent<Player>().isDed)
-            {
-                print("he ded");
-                isAttacking = false;
-                CancelInvoke();
-            }
+            //SpawnProjectile(); //TODO slow this down
+            //InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots); //Part 3
+            
+            //if (player.GetComponent<Player>().isDed)
+            //{
+            //    print("he ded");
+            //    isAttacking = false;
+            //    CancelInvoke();
+            //}
         }
         if (distanceToPlayer > attackRadius) //PART 3
         {
@@ -64,24 +65,21 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    void SpawnProjectile()
-    {
-        GameObject newProjectile = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity);
-        //print("WTF");
-        //after putting in the above line, have arik star up his game for shiggles
-        Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
-        projectileComponent.damageCasued = damagePerShot;
-        //ALL THIS WAS SETTING UP THE PROJECTILE AND IT'S DAMAGE
-        //projectileComponent.damageCasued(damagePerShot); //Part 3
-
-        //SETTING UP THE VECTOR TO THE PLAYER
-        Vector3 unitVectorToPlayer = (player.transform.position - projectileSocket.transform.position).normalized;
+    //void SpawnProjectile()
+    //{
+    //    GameObject newProjectile = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity);
         
-        //SET IT'S SPEED, THEN VELOCITY BASED ON SPEED
-        float projectileSpeed = projectileComponent.projectleSpeed;
-        print("me " + projectileSpeed);
-        newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
-    }
+    //    Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
+    //    projectileComponent.damageCasued = damagePerShot;
+
+    //    //SETTING UP THE VECTOR TO THE PLAYER
+    //    Vector3 unitVectorToPlayer = (player.transform.position - projectileSocket.transform.position).normalized;
+        
+    //    //SET IT'S SPEED, THEN VELOCITY BASED ON SPEED
+    //    float projectileSpeed = projectileComponent.projectleSpeed;
+    //    //print("me " + projectileSpeed);
+    //    newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
+    //}
 
 
     private void OnDrawGizmos()

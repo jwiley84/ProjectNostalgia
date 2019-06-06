@@ -556,7 +556,6 @@ public class Inventory : MonoBehaviour
     /// </summary>
     public virtual void LoadInventory()
     {
-        print("i'm loading the inventory!");
         //Loads all the inventory's data InventoryManager.Instance.From the playerprefs
         string content = PlayerPrefs.GetString(gameObject.name + "content");
         slots = PlayerPrefs.GetInt(gameObject.name + "slots");

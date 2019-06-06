@@ -13,6 +13,9 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] float maxAttackRange = 1.5f;
 
     [SerializeField] int enemyLayer = 9;
+    [SerializeField] Projectile arrowProjectile;
+    [SerializeField] Projectile spellProjectile;
+    Projectile projectileInstance;
 
     public Inventory inventory;
     public Inventory charPanel;
@@ -28,6 +31,7 @@ public class Player : MonoBehaviour, IDamagable
     private int stamina;
 
     private static Player instance;
+    string attackType = string.Empty;
 
     public static Player Instance
     {
@@ -43,14 +47,16 @@ public class Player : MonoBehaviour, IDamagable
 
     private Inventory storageChest; //418
 
-    GameObject currentTarget;
+    public GameObject currentTarget;
 
     CameraRaycaster cameraRaycaster;
 
     float _mLastHitTime = 0f;
     public float currentHealthPoints;
     public bool isDed = false;
-    
+    public bool HasProjectile = false;
+    private Rigidbody rb;
+    bool inRange = false;
 
     #endregion
 
@@ -86,18 +92,25 @@ public class Player : MonoBehaviour, IDamagable
 
     #region Methods
 
+
+
     void Start()
     {
         cameraRaycaster = FindObjectOfType<CameraRaycaster>();
         cameraRaycaster.notifyMouseClickObservers += OnMouseClick;
         currentHealthPoints = maxHealthPoints;
         SetStats(0, 0, 0, 0);
+        rb = this.GetComponent<Rigidbody>();
 
     }
     void Update()//418
     {
-
-        //HandleMovement(); // this is only temporary
+        //REFACTORING lines 110-114
+        //HandleMovement();
+        if (Input.GetMouseButtonDown(0))
+        {
+            MoveToCursor();
+        }
         if (Input.GetKeyDown("i"))//418
         {
             inventory.Open();
@@ -119,6 +132,13 @@ public class Player : MonoBehaviour, IDamagable
             }
 
         }//this girl is driving me nuts
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            print("I hit space");
+            //speed = 0;
+            rb.velocity = Vector3.zero;
+        }
+
         Armed();
     }
     public void Armed()
@@ -139,24 +159,30 @@ public class Player : MonoBehaviour, IDamagable
                     damage = 5f;
                     //change speed to Low
                     minTimeBetweenHits = 0.5f;
+                    attackType = "1hmeleeAttack";
+                    HasProjectile = false;
                     break;
                 case ItemType.RANGED:
                     //case: bow:
                     //change maxAttackRange to high
-                    maxAttackRange = 4f;
+                    maxAttackRange = 40f;
                     //change attack damage to low
                     damage = 2f;
                     //change speed to med
-                    minTimeBetweenHits = 0.2f;
+                    minTimeBetweenHits = 2f;
+                    attackType = "rangedAttack";
+                    HasProjectile = true;
                     break;
                 case ItemType.MAGIC:
                     //case fire
                     //change maxAttackRange to med
-                    maxAttackRange = 2f;
+                    maxAttackRange = 40f;
                     //change attack damage to high
                     damage = 7f;
                     //change speed to med
                     minTimeBetweenHits = 0.7f;
+                    attackType = "magicAttack";
+                    HasProjectile = true;
                     break;
                 case ItemType.TWOHAND:
                     //case TWOHAND:
@@ -166,8 +192,12 @@ public class Player : MonoBehaviour, IDamagable
                     damage = 10f;
                     //change speed to med
                     minTimeBetweenHits = 1f;
+                    attackType = "2hmeleeAttack";
+                    HasProjectile = false;
                     break;
                 default:
+                    attackType = "unarmedAttack";
+                    HasProjectile = false;
                     break;
             }
         }
@@ -176,30 +206,34 @@ public class Player : MonoBehaviour, IDamagable
     {
         if (layerHit == enemyLayer)
         {
-            var enemy = raycastHit.collider.gameObject;
-            //print("huzzah! " + enemy);
-
-            if ((enemy.transform.position - transform.position).magnitude > maxAttackRange)
+            print(attackType);
+            this.currentTarget = raycastHit.collider.gameObject;
+            //are we, from pt on ground to us, comparatively fartehr then maxattackrange
+            if ((raycastHit.point - transform.position).magnitude > maxAttackRange)
             {
-                return;
+                print("this was seen");
+                MoveToCursor();
             }
-            currentTarget = enemy;
-            var enemyComponent = enemy.GetComponent<Enemy>();
-            if (Time.time - _mLastHitTime > minTimeBetweenHits)
+            if ((currentTarget.transform.position - transform.position).magnitude < maxAttackRange)
             {
-                GetComponent<Animator>().SetTrigger("meleeAttack");
-                print("Ok, hi. I hite for " + damage.ToString() + " damage");
-                enemyComponent.TakeDamage(damage);
-                _mLastHitTime = Time.time;
+                GetComponent<PlayerMovement>().Stop();
             }
-
+            transform.LookAt(currentTarget.transform);
+            var enemyComponent = currentTarget.GetComponent<Enemy>();
+            if (GetComponent<PlayerMovement>().frozen)
+            {
+                if (Time.time - _mLastHitTime > minTimeBetweenHits)
+                {
+                    GetComponent<Animator>().SetTrigger(attackType);
+                    rb.freezeRotation = true;
+                    rb.constraints = RigidbodyConstraints.FreezeAll;
+                    Hit();
+                    _mLastHitTime = Time.time;
+                }
+            }
         }
     }
-    /// <summary>
-    /// THIS IS THE JANKIEST POS I'VE EVER WRITTEN, SINCE IT FUNCITONS AROUND 'COLLIDING' WITH MY MANA BARREL
-    /// UGH, WAIT, THIS IS THE FUNCTIONALITY I'LL NEED FOR MY HEALTH FOUNTAINS/RIVERS
-    /// </summary>
-    /// <param name="other"></param>
+
     private void OnTriggerEnter(Collider other) //checking if the item we're running into has a box collider
     {
         if (other.tag == "Item")
@@ -253,10 +287,12 @@ public class Player : MonoBehaviour, IDamagable
     public void TakeDamage(float damage)
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
+        print("Player Health from player.cs = " + currentHealthPoints.ToString());
         if (currentHealthPoints <= 0)
         {
             isDed = true;
             GetComponent<Animator>().SetTrigger("die");
+            //deactivate enemy.cs component 
         }
     }
 
@@ -273,13 +309,55 @@ public class Player : MonoBehaviour, IDamagable
 
     #endregion
 
-    #region newSceneMovement
-    public float speed;
 
-    private void HandleMovement()
+    public int yShift = 0;
+    public void LaunchProjectile(Transform target)
     {
-        float translation = speed * Time.deltaTime;
-        transform.Translate(new Vector3(Input.GetAxis("Horizontal") * translation, 0, Input.GetAxis("Vertical") * translation));
+        print(target.name);
+        if (attackType == "rangedAttack")
+        {
+            projectileInstance = Instantiate(arrowProjectile, new Vector3(transform.position.x, transform.position.y + yShift, transform.position.z), Quaternion.identity);
+
+        }
+        else if (attackType == "magicAttack")
+        {
+            projectileInstance = Instantiate(spellProjectile, new Vector3(transform.position.x, transform.position.y + yShift, transform.position.z), Quaternion.identity);
+        }
+
+        projectileInstance.SetTarget(target, damage);
     }
+
+    void Hit()
+    {
+        if (currentTarget == null) { return; }
+        if (HasProjectile)
+        {
+            LaunchProjectile(currentTarget.transform);
+        }
+        else
+        {
+            currentTarget.GetComponent<Enemy>().TakeDamage(damage);
+        }
+
+    }
+
+    //void Shoot()
+    //{
+    //    Hit();
+    //}
+
+    #region newSceneMovement
+    //REFACTORING
+    private void MoveToCursor()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        RaycastHit hit;
+        bool hasHit = Physics.Raycast(ray, out hit);
+        if (hasHit)
+        {
+            GetComponent<PlayerMovement>().MoveTo(hit.point);
+        }
+    }
+
     #endregion
 }

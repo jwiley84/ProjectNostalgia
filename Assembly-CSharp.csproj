@@ -70,6 +70,7 @@
     <Compile Include="Assets\Camera and UI\Scripts\CameraRaycaster.cs" />
     <Compile Include="Assets\Camera and UI\Scripts\mouseCursor.cs" />
     <Compile Include="Assets\Enemy.cs" />
+    <Compile Include="Assets\FollowCamera.cs" />
     <Compile Include="Assets\HelloWorld.cs" />
     <Compile Include="Assets\Inventory\Scripts\CharacterPanel.cs" />
     <Compile Include="Assets\Inventory\Scripts\ChestScript.cs" />
@@ -222,6 +223,7 @@
     <None Include="Assets\Samples\Standard Assets\ParticleSystems\Shaders\PriorityParticleAddSoft.shader" />
     <None Include="Assets\Samples\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
     <None Include="Assets\Samples\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
+    <None Include="Assets\SimpleFX\Materials\UnlitVertexColour_Alpha.shader" />
     <None Include="Assets\Samples\Standard Assets\Effects\Projectors\Shaders\ProjectorLight.shader" />
     <None Include="Assets\Samples\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
     <None Include="Assets\Inventory\XMLFile1.xml" />
@@ -238,6 +240,7 @@
     <None Include="Assets\Samples\Standard Assets\ParticleSystems\Shaders\PriorityParticleAdd.shader" />
     <None Include="Assets\Samples\Standard Assets\Effects\TessellationShaders\Shaders\BumpedSpecularDisplacement.shader" />
     <None Include="Assets\Samples\SampleScenes\Shaders\Skybox-Procedural.shader" />
+    <None Include="Assets\Polygonal Particles\Assets\Shaders\GradientBackgroundShader.shader" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/v-jewail/repos/rpg/v1/KnockoffUO/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>
