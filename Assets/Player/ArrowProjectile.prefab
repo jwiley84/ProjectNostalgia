@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2865857501958471315}
   m_Layer: 0
   m_Name: ArrowProjectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   projectileSpeed: 7
+  damage: 0
+  targetYShift: 0
 --- !u!65 &2865857501958471315
 BoxCollider:
   m_ObjectHideFlags: 0

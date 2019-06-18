@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityStandardAssets.Characters.ThirdPerson;
 
-public class Enemy : MonoBehaviour {
+public class Enemy : MonoBehaviour
+{
 
     [SerializeField] float maxHealthPoints = 100f;
     [SerializeField] float attackRadius = 10f;
@@ -32,23 +31,16 @@ public class Enemy : MonoBehaviour {
         aiCharacterControl = GetComponent<AICharacterControl>();
         currentHealthPoints = maxHealthPoints;
     }
-
+    
     void Update()
     {
         float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+        
         if (distanceToPlayer <= attackRadius && !isAttacking) //&& on is Part 3
         {
             isAttacking = true;
-            //print(gameObject.name + " is attacking!");
-            //SpawnProjectile(); //TODO slow this down
-            //InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots); //Part 3
-            
-            //if (player.GetComponent<Player>().isDed)
-            //{
-            //    print("he ded");
-            //    isAttacking = false;
-            //    CancelInvoke();
-            //}
+            SpawnProjectile(); //TODO slow this down
+            InvokeRepeating("SpawnProjectile", 0f, secondsBetweenShots); //Part 3  
         }
         if (distanceToPlayer > attackRadius) //PART 3
         {
@@ -65,21 +57,13 @@ public class Enemy : MonoBehaviour {
         }
     }
 
-    //void SpawnProjectile()
-    //{
-    //    GameObject newProjectile = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity);
-        
-    //    Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
-    //    projectileComponent.damageCasued = damagePerShot;
+    void SpawnProjectile()
+    {
+        GameObject newProjectile = Instantiate(projectileToUse, projectileSocket.transform.position, Quaternion.identity);
 
-    //    //SETTING UP THE VECTOR TO THE PLAYER
-    //    Vector3 unitVectorToPlayer = (player.transform.position - projectileSocket.transform.position).normalized;
-        
-    //    //SET IT'S SPEED, THEN VELOCITY BASED ON SPEED
-    //    float projectileSpeed = projectileComponent.projectleSpeed;
-    //    //print("me " + projectileSpeed);
-    //    newProjectile.GetComponent<Rigidbody>().velocity = unitVectorToPlayer * projectileSpeed;
-    //}
+        Projectile projectileComponent = newProjectile.GetComponent<Projectile>();
+        projectileComponent.SetTarget(player.transform, damagePerShot);
+    }
 
 
     private void OnDrawGizmos()

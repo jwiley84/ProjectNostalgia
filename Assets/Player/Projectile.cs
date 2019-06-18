@@ -1,32 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class Projectile : MonoBehaviour {
-
-    #region old Projectile Stuff
-    // OLD PROJECTILE
-    //public float projectleSpeed; //NEW
-    //public float damageCasued; 
-
-
-    //private void OnTriggerEnter(Collider collider)
-    //{
-    //    //this says if we enter a collider, check if it's an IDamagable one (Player)
-    //    Component damagabeComponent = collider.gameObject.GetComponent(typeof(IDamagable));
-    //    if (damagabeComponent)
-    //    {
-    //        (damagabeComponent as IDamagable).TakeDamage(damageCasued);
-    //    }
-    //}
-
-    #endregion
+public class Projectile : MonoBehaviour
+{
 
     #region New Projectile Stuff
 
     [SerializeField] Transform target = null;
-    [SerializeField] float projectileSpeed = 1;
-    float damage;
+    [SerializeField] public float projectileSpeed = 1;
+    public float damage;
     [SerializeField] float targetYShift;
 
     void Update()
@@ -39,7 +20,7 @@ public class Projectile : MonoBehaviour {
         transform.LookAt(GetAimPosition());
         transform.Translate(Vector3.forward * projectileSpeed * Time.deltaTime);
     }
-     
+    //발사체
     private Vector3 GetAimPosition()
     {
         CapsuleCollider targetCapsule = target.GetComponent<CapsuleCollider>();
@@ -59,16 +40,21 @@ public class Projectile : MonoBehaviour {
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.GetComponent<Enemy>())
+        if (target.GetComponent<CapsuleCollider>() == other.GetComponent<CapsuleCollider>())
         {
-            other.GetComponent<Enemy>().TakeDamage(damage);
-            Destroy(gameObject);
+            print("They're the same thing!");
+            if (other.GetComponent<Enemy>())
+            {
+                other.GetComponent<Enemy>().TakeDamage(damage);
+                Destroy(gameObject);
+            }
+            else if (other.GetComponent<Player>())
+            {
+                other.GetComponent<Player>().TakeDamage(damage);
+                Destroy(gameObject);
+            }
         }
-        else if(other.GetComponent<Player>())
-        {
-            other.GetComponent<Player>().TakeDamage(damage);
-            Destroy(gameObject);
-        }
+
     }
 
     #endregion

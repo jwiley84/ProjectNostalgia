@@ -8,6 +8,11 @@ TagManager:
   - Item
   - Container
   - Inventory
+  - Enemy
+  - EndGame
+  - levelChanger
+  - Projectile
+  - questObject
   layers:
   - Default
   - TransparentFX
@@ -20,7 +25,7 @@ TagManager:
   - Walkable
   - Enemy
   - Container
-  - 
+  - questObject
   - 
   - 
   - 

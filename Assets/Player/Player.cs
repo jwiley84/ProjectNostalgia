@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class Player : MonoBehaviour, IDamagable
@@ -13,12 +14,14 @@ public class Player : MonoBehaviour, IDamagable
     [SerializeField] float maxAttackRange = 1.5f;
 
     [SerializeField] int enemyLayer = 9;
+    
     [SerializeField] Projectile arrowProjectile;
     [SerializeField] Projectile spellProjectile;
     Projectile projectileInstance;
 
     public Inventory inventory;
     public Inventory charPanel;
+    public GameObject levelChange;
 
     public Text statsText;
     public int baseIntellect;
@@ -110,6 +113,7 @@ public class Player : MonoBehaviour, IDamagable
         if (Input.GetMouseButtonDown(0))
         {
             MoveToCursor();
+            
         }
         if (Input.GetKeyDown("i"))//418
         {
@@ -167,7 +171,7 @@ public class Player : MonoBehaviour, IDamagable
                     //change maxAttackRange to high
                     maxAttackRange = 40f;
                     //change attack damage to low
-                    damage = 2f;
+                    damage = 200f;
                     //change speed to med
                     minTimeBetweenHits = 2f;
                     attackType = "rangedAttack";
@@ -208,7 +212,6 @@ public class Player : MonoBehaviour, IDamagable
         {
             print(attackType);
             this.currentTarget = raycastHit.collider.gameObject;
-            //are we, from pt on ground to us, comparatively fartehr then maxattackrange
             if ((raycastHit.point - transform.position).magnitude > maxAttackRange)
             {
                 print("this was seen");
@@ -233,6 +236,7 @@ public class Player : MonoBehaviour, IDamagable
             }
         }
     }
+
 
     private void OnTriggerEnter(Collider other) //checking if the item we're running into has a box collider
     {
@@ -264,7 +268,18 @@ public class Player : MonoBehaviour, IDamagable
         {
             storageChest = other.GetComponent<ChestScript>().chestInventory;
         }
+        else if (other.tag == "questObject")
+        {
+            StartCoroutine(tempPause());
+        }
     }
+
+    private IEnumerator tempPause()
+    {
+        yield return new WaitForSeconds(2);
+        levelChange.GetComponent<LevelChanger>().winClick();
+    }
+
 
     private int Rando(int itemCount)
     {
@@ -287,12 +302,21 @@ public class Player : MonoBehaviour, IDamagable
     public void TakeDamage(float damage)
     {
         currentHealthPoints = Mathf.Clamp(currentHealthPoints - damage, 0f, maxHealthPoints);
-        print("Player Health from player.cs = " + currentHealthPoints.ToString());
         if (currentHealthPoints <= 0)
         {
-            isDed = true;
             GetComponent<Animator>().SetTrigger("die");
-            //deactivate enemy.cs component 
+            var enemy = GameObject.FindGameObjectsWithTag("Enemy");
+            foreach (var mob in enemy)
+            {
+                mob.GetComponent<Enemy>().CancelInvoke();
+            }
+            var extraProjectiles = GameObject.FindGameObjectsWithTag("Projectile");
+            foreach (var item in extraProjectiles)
+            {
+                Destroy(item);
+            }
+            //var levelChange = GameObject.FindGameObjectWithTag("levelChanger");
+            levelChange.GetComponent<LevelChanger>().onDead();
         }
     }
 
@@ -313,7 +337,7 @@ public class Player : MonoBehaviour, IDamagable
     public int yShift = 0;
     public void LaunchProjectile(Transform target)
     {
-        print(target.name);
+        //print(target.name);
         if (attackType == "rangedAttack")
         {
             projectileInstance = Instantiate(arrowProjectile, new Vector3(transform.position.x, transform.position.y + yShift, transform.position.z), Quaternion.identity);

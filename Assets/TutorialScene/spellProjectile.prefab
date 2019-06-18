@@ -5011,7 +5011,7 @@ GameObject:
   - component: {fileID: 467719314749888324}
   m_Layer: 0
   m_Name: spellProjectile
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5047,6 +5047,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 0}
   projectileSpeed: 7
+  damage: 0
   targetYShift: 0
 --- !u!65 &172917542183757098
 BoxCollider:
