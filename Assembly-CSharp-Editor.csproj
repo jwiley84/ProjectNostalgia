@@ -62,13 +62,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\ArtSamples\Samples\Standard Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
+    <Compile Include="Assets\ArtSamples\Samples\Standard Assets\Editor\Water\Water4\GerstnerDisplaceEditor.cs" />
+    <Compile Include="Assets\ArtSamples\Samples\Standard Assets\Editor\Water\Water4\PlanarReflectionEditor.cs" />
+    <Compile Include="Assets\ArtSamples\Samples\Standard Assets\Editor\Water\Water4\SpecularLightingEditor.cs" />
+    <Compile Include="Assets\ArtSamples\Samples\Standard Assets\Editor\Water\Water4\WaterBaseEditor.cs" />
+    <Compile Include="Assets\ArtSamples\Samples\Standard Assets\Editor\Water\Water4\WaterEditorUtility.cs" />
     <Compile Include="Assets\Editor\CameraRaycasterEditor.cs" />
-    <Compile Include="Assets\Samples\Standard Assets\Editor\CrossPlatformInput\CrossPlatformInputInitialize.cs" />
-    <Compile Include="Assets\Samples\Standard Assets\Editor\Water\Water4\GerstnerDisplaceEditor.cs" />
-    <Compile Include="Assets\Samples\Standard Assets\Editor\Water\Water4\PlanarReflectionEditor.cs" />
-    <Compile Include="Assets\Samples\Standard Assets\Editor\Water\Water4\SpecularLightingEditor.cs" />
-    <Compile Include="Assets\Samples\Standard Assets\Editor\Water\Water4\WaterBaseEditor.cs" />
-    <Compile Include="Assets\Samples\Standard Assets\Editor\Water\Water4\WaterEditorUtility.cs" />
     <Reference Include="Unity.Timeline.Editor">
       <HintPath>C:/Users/v-jewail/repos/rpg/v1/KnockoffUO/Library/ScriptAssemblies/Unity.Timeline.Editor.dll</HintPath>
     </Reference>

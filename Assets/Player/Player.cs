@@ -110,7 +110,7 @@ public class Player : MonoBehaviour, IDamagable
     {
         //REFACTORING lines 110-114
         //HandleMovement();
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButton(0))
         {
             MoveToCursor();
             
